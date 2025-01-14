@@ -28,7 +28,7 @@ export default function SymptomCard(props) {
           </div>
           {/* //& Severity badge and menu icon */}
           <div className='mt-0 flex justify-center items-center h-fit w-fit'>
-            <Badge className={` ${props.severityColor} mr-2 font-medium`}>
+            <Badge className={` ${props.severityColor} mr-2 font-medium `}>
               {props.severityTitle}
             </Badge>
 

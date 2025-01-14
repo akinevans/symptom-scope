@@ -80,10 +80,9 @@ export default function TrackingPage() {
 
   return (
     <div className='flex flex-row'>
-      <div className='flex flex-col max-h-[1300px] w-fit text-left overflow-scroll'>
-        <div className=''>
-          <SidebarMenu />
-        </div>
+      <div className='flex flex-col max-w-[410px] max-h-[1300px] w-fit text-left overflow-y-scroll'>
+        <SidebarMenu />
+
         <div className='overflow-scroll'>{generateSymptomCards(15)}</div>
       </div>
       <DataForm />

@@ -11,7 +11,7 @@ export function Navigation() {
         <CardTitle className='min-w-fit text-xl font-normal'>
           Symptom Scope
         </CardTitle>
-        <div className='ml-16 w-fit flex justify-between items-center '>
+        <div className='ml-16 w-fit flex justify-between items-center  '>
           <NavLink to='/' className={linkStyles}>
             Home
           </NavLink>
