@@ -5,38 +5,34 @@ import DataForm from '@/components/DataForm';
 export default function TrackingPage() {
   const severityData = [
     {
-      title: 'Mild',
-      color: 'text-[#476C3B] bg-[#ACD99E]',
+      title: 'Changes in vision',
+      note: 'Alterations in visual acuity, clarity, or perception. Blurriness, double vision, blind spots.',
+      severityTitle: 'Mild',
+      color: 'text-[#2D5101] bg-[#C0DD78]',
     },
     {
-      title: 'Moderate',
-      color: 'text-[#D29104] bg-[#FFDF9A]',
+      title: 'Tooth Ache',
+      note: 'Sever pain when chewing and drinking cold liquids',
+      severityTitle: 'Moderate',
+      color: 'text-[#6D3A00] bg-[#F5CD6F]',
     },
     {
-      title: 'Severe',
-      color: ' text-[#92411b] bg-[#ffc3a7]',
+      title: 'Back pain',
+      note: 'Tight muscles and some tenderness. Difficulty standing and walking',
+      severityTitle: 'Severe',
+      color: ' text-[#81371E] bg-[#F3C6BA]',
     },
     {
-      title: 'Very Severe',
-      color: ' text-[#D80000] bg-[#F19999]',
+      title: 'Sore throat',
+      note: 'Pain, scratchiness, or irritation of the throat that worsens when swallowing.',
+      severityTitle: 'Very Severe',
+      color: ' text-[#8C161E] bg-[#FFC3C9]',
     },
   ];
 
   const getSeverityData = () => {
     const randomNum = Math.floor(Math.random() * severityData.length);
     return severityData[randomNum];
-  };
-
-  const getRandomTitle = () => {
-    const titles = [
-      'Fatigue',
-      'Headache',
-      'Chills',
-      'Fever',
-      'Sore Throat',
-      'Muscle Aches',
-    ];
-    return titles[Math.floor(Math.random() * titles.length)];
   };
 
   function getRandomDate(): string {
@@ -69,9 +65,10 @@ export default function TrackingPage() {
       symptomCards.push(
         <SymptomCard
           date={getRandomDate()}
-          title={getRandomTitle()}
+          title={data.title}
           severityColor={data.color}
-          severityTitle={data.title}
+          severityTitle={data.severityTitle}
+          note={data.note}
         />
       );
     }
@@ -80,10 +77,12 @@ export default function TrackingPage() {
 
   return (
     <div className='flex flex-row'>
-      <div className='flex flex-col max-w-[410px] max-h-[1300px] w-fit text-left overflow-y-scroll'>
+      <div className='flex flex-col max-w-[410px] max-h-[1300px] w-fit text-left'>
         <SidebarMenu />
 
-        <div className='overflow-scroll'>{generateSymptomCards(15)}</div>
+        <div className='overflow-y-scroll scroll-'>
+          {generateSymptomCards(15)}
+        </div>
       </div>
       <DataForm />
     </div>

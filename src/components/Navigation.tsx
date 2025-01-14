@@ -6,7 +6,7 @@ export function Navigation() {
   const linkStyles = 'mr-8 text-sm font-normal';
 
   return (
-    <Card className='mb-2 w-[90vw] max-w-[1280px] max-h-[60px] flex flex-row justify-between items-center bg-white shadow-none border-none'>
+    <Card className='mb-2 w-full max-w-[1280px] max-h-[60px] flex flex-row justify-between items-center bg-white shadow-none border-none'>
       <CardHeader className='flex flex-row justify-start items-center'>
         <CardTitle className='min-w-fit text-xl font-normal'>
           Symptom Scope
@@ -30,7 +30,9 @@ export function Navigation() {
           </NavLink>
         </div>
       </CardHeader>
-      <Button className=''>Login</Button>
+      <NavLink to='/login' className={`${linkStyles} `}>
+        <Button>Login</Button>
+      </NavLink>
     </Card>
   );
 }

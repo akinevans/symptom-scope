@@ -42,24 +42,13 @@ export default function SymptomCard(props) {
               <Badge className={` ${props.severityColor} mr-2 font-medium `}>
                 {props.severityTitle}
               </Badge>
-
-              {/* <EllipsisVertical
-              color='#65768c'
-              className='mr-[-15px]'
-              onClick={() => {
-                alert('menu btn clicked');
-              }}
-            /> */}
             </div>
           </CardHeader>
           <div className='mt-[-5px] mb-4 flex justify-center'>
             <Separator className='w-[70%] flex flex-row justify-center' />
           </div>
           <CardContent>
-            <p className='text-left'>
-              Lorem ipsum dolor sit amet, consectetur adipi scing elit, sed do
-              eiusmod tempor incididunt ut.
-            </p>
+            <p className='text-left truncate'>{props.note}</p>
           </CardContent>
         </Card>
       </NavLink>
