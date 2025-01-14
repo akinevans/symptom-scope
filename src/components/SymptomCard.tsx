@@ -52,8 +52,8 @@ export default function SymptomCard() {
     <Card className='mb-2 max-w-[410px] '>
       <CardHeader className='flex flex-row place-content-between align-top text-left'>
         <div className=''>
-          <CardDescription>{getRandomDate()}</CardDescription>
-          <CardTitle>{getRandomTitle()}</CardTitle>
+          <CardDescription className='mb-2'>{getRandomDate()}</CardDescription>
+          <CardTitle className='font-normal'>{getRandomTitle()}</CardTitle>
         </div>
         {/* //& Severity tag and menu icon */}
         <div className='mt-0 flex justify-center items-center h-fit w-fit'>

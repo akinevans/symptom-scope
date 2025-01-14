@@ -1,34 +1,36 @@
+import { NavLink } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 
 export function Navigation() {
-  return (
-    <Card className='mb-2 w-[90vw] max-w-[1340px] max-h-[70px] flex flex-row justify-between items-center bg-inherit shadow-none border-none'>
-      <CardHeader className='flex flex-row justify-start items-center'>
-        <CardTitle className='min-w-fit text-3xl'>Symptom Scope</CardTitle>
-        <div className='ml-16  w-fit flex justify-between items-center '>
-          <a className='mr-8 text-md font-semibold' href=''>
-            Home
-          </a>
+  const linkStyles = 'mr-8 text-md font-normal';
 
-          <a className='mr-8 text-md font-semibold' href=''>
+  return (
+    <Card className='mb-2 w-[90vw] max-w-[1280px] max-h-[70px] flex flex-row justify-between items-center bg-white shadow-none border-none'>
+      <CardHeader className='flex flex-row justify-start items-center'>
+        <CardTitle className='min-w-fit text-3xl font-medium'>
+          Symptom Scope
+        </CardTitle>
+        <div className='ml-16  w-fit flex justify-between items-center '>
+          <NavLink to='/' className={linkStyles}>
+            Home
+          </NavLink>
+
+          <NavLink to='/dashboard' className={linkStyles}>
             Dashboard
-          </a>
-          <a
-            className='mr-8 text-md font-semibold underline under underline-offset-6 decoration-2'
-            href=''
-          >
+          </NavLink>
+          <NavLink to='/tracking' className={linkStyles}>
             Tracking
-          </a>
-          <a className='mr-8 text-md font-semibold' href=''>
+          </NavLink>
+          <NavLink to='/about' className={linkStyles}>
             About
-          </a>
-          <a className='mr-8 text-md font-semibold' href=''>
+          </NavLink>
+          <NavLink to='/contact' className={linkStyles}>
             Contact
-          </a>
+          </NavLink>
         </div>
       </CardHeader>
-      <Button className='mr-6'>Login</Button>
+      <Button className=''>Login</Button>
     </Card>
   );
 }

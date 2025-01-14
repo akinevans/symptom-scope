@@ -11,7 +11,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  /* background-color: #242424; */
+  background-color: #f3f4f6;
 }
 
 body {
@@ -20,7 +20,18 @@ body {
   /* place-items: center; */
   min-width: 320px;
   min-height: 100vh;
+  /* background-color: #ffffff; */
   background-color: #f3f4f6;
+}
+
+a.active {
+  /* text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px; */
+}
+
+::selection {
+  background-color: #2560eb55;
 }
 
 @layer base {
