@@ -1,10 +1,9 @@
 import './App.css';
-import { Button } from './components/ui/button';
-
+import LoginPage from './pages/LoginPage';
 function App() {
   return (
     <>
-      <Button>Click Meeee</Button>
+      <LoginPage />
     </>
   );
 }
