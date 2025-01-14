@@ -1,4 +1,3 @@
-import React from 'react';
 import { SidebarMenu } from '@/components/SidebarMenu';
 import SymptomCard from '@/components/SymptomCard';
 import DataForm from '@/components/DataForm';
