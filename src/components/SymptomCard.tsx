@@ -1,64 +1,37 @@
-//! use a badge component instead
 //^ can do an easy text description max 100 characters rule with css truncate
 
 import {
   Card,
   CardContent,
   CardDescription,
-  //   CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import SeverityTag from './SeverityTag';
+import { Badge } from '@/components/ui/badge';
 import { EllipsisVertical } from 'lucide-react';
+import { NavLink } from 'react-router';
 
-export default function SymptomCard() {
-  const getRandomTitle = () => {
-    const titles = [
-      'Fatigue',
-      'Headache',
-      'Chills',
-      'Fever',
-      'Sore Throat',
-      'Muscle Aches',
-    ];
-    return titles[Math.floor(Math.random() * titles.length)];
-  };
-
-  function getRandomDate(): string {
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    const randomDay = Math.floor(Math.random() * 28) + 1; // To ensure a valid day
-    const randomMonth = months[Math.floor(Math.random() * months.length)];
-    const randomYear = Math.floor(Math.random() * 7) + 2018;
-
-    return `${randomMonth} ${randomDay} ${randomYear}`;
-  }
-
+export default function SymptomCard(props) {
   return (
-    <Card className='mb-2 max-w-[410px] '>
-      <CardHeader className='flex flex-row place-content-between align-top text-left'>
-        <div className=''>
-          <CardDescription className='mb-2'>{getRandomDate()}</CardDescription>
-          <CardTitle className='font-normal'>{getRandomTitle()}</CardTitle>
-        </div>
-        {/* //& Severity tag and menu icon */}
-        <div className='mt-0 flex justify-center items-center h-fit w-fit'>
-          <SeverityTag />
-          <a href=''>
+    <NavLink
+      to='#'
+      onClick={() => {
+        alert('Symptom Card Clicked');
+      }}
+    >
+      <Card className='mb-2 max-w-[410px] '>
+        <CardHeader className='flex flex-row place-content-between align-top text-left'>
+          <div className=''>
+            <CardDescription className='mb-2'>{props.date}</CardDescription>
+            <CardTitle className='text-xl font-normal'>{props.title}</CardTitle>
+          </div>
+          {/* //& Severity badge and menu icon */}
+          <div className='mt-0 flex justify-center items-center h-fit w-fit'>
+            <Badge className={` ${props.severityColor} mr-2 font-medium`}>
+              {props.severityTitle}
+            </Badge>
+
             <EllipsisVertical
               color='#65768c'
               className='mr-[-15px]'
@@ -66,21 +39,18 @@ export default function SymptomCard() {
                 alert('menu btn clicked');
               }}
             />
-          </a>
+          </div>
+        </CardHeader>
+        <div className='mt-[-5px] mb-4 flex justify-center'>
+          <Separator className='w-[70%] flex flex-row justify-center' />
         </div>
-      </CardHeader>
-      <div className='mt-[-5px] mb-4 flex justify-center'>
-        <Separator className='w-[70%] flex flex-row justify-center' />
-      </div>
-      <CardContent>
-        <p className='text-left'>
-          Lorem ipsum dolor sit amet, consectetur adipi scing elit, sed do
-          eiusmod tempor incididunt ut.
-        </p>
-      </CardContent>
-      {/* <CardFooter>
-          <p>Card Footer</p>
-        </CardFooter> */}
-    </Card>
+        <CardContent>
+          <p className='text-left'>
+            Lorem ipsum dolor sit amet, consectetur adipi scing elit, sed do
+            eiusmod tempor incididunt ut.
+          </p>
+        </CardContent>
+      </Card>
+    </NavLink>
   );
 }

@@ -14,7 +14,9 @@ export function SidebarMenu() {
   return (
     <Card className=' mb-2 w-[410px] '>
       <CardHeader>
-        <CardTitle className='font-medium'>Track New Symptom</CardTitle>
+        <CardTitle className=' text-lg font-normal'>
+          Track New Symptom
+        </CardTitle>
         {/* <CardDescription>Deploy your new project in one-click.</CardDescription> */}
       </CardHeader>
       <CardContent>
