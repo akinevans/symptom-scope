@@ -2,6 +2,8 @@ import { SidebarMenu } from '@/components/SidebarMenu';
 import SymptomCard from '@/components/SymptomCard';
 import DataForm from '@/components/DataForm';
 
+// TODO:  add multi select to form (medications, triggers / cause etc)
+
 export default function TrackingPage() {
   const severityData = [
     {
@@ -12,7 +14,7 @@ export default function TrackingPage() {
     },
     {
       title: 'Tooth Ache',
-      note: 'Sever pain when chewing and drinking cold liquids',
+      note: 'Pain when chewing that worsens when drinking cold liquids. Pain seems to subside after a few minutes',
       severityTitle: 'Moderate',
       color: 'text-[#6D3A00] bg-[#F5CD6F]',
     },
@@ -76,11 +78,11 @@ export default function TrackingPage() {
   };
 
   return (
-    <div className='flex flex-row'>
-      <div className='flex flex-col max-w-[410px] max-h-[1300px] w-fit text-left'>
+    <div className='flex flex-row max-h-[90vh] '>
+      <div className=' flex flex-col max-w-[410px] max-h-[1300px] w-fit text-left'>
         <SidebarMenu />
 
-        <div className='overflow-y-scroll scroll-'>
+        <div className='flex flex-col gap-y-2 overflow-y-scroll scroll-smooth'>
           {generateSymptomCards(15)}
         </div>
       </div>

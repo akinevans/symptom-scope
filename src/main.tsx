@@ -17,7 +17,7 @@ createRoot(document.getElementById('root')!).render(
       <Route path='/login' element={<LoginPage />} />
       <Route path='/tracking' element={<TrackingPage />} />
     </Routes>
-    <div className='mt-2 mb-4'>
+    <div className='mt-2'>
       <Footer />
     </div>
   </BrowserRouter>

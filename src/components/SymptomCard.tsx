@@ -1,5 +1,3 @@
-//^ can do an easy text description max 100 characters rule with css truncate
-
 import {
   Card,
   CardContent,
@@ -7,6 +5,15 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarTrigger,
+} from '@/components/ui/menubar';
+
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { EllipsisVertical } from 'lucide-react';
@@ -15,21 +22,49 @@ import { NavLink } from 'react-router';
 export default function SymptomCard(props) {
   return (
     <div className='relative'>
-      {/* //* placing the ellipsis outside of the NavLink allows for clicking on either the symptomCard OR the ellipses seperatley not both */}
-      <EllipsisVertical
-        color='#65768c'
-        className='absolute top-8 right-5 mr-[-15px] cursor-pointer'
-        onClick={() => {
-          alert('menu btn clicked');
-        }}
-      />
+      {/* //& Menu modal */}
+      {/* //! hidden DOM piece MenuBar, breaks layout of vertical symptom bars */}
+      <Menubar className='h-0 border-none p-0'>
+        <MenubarMenu>
+          <MenubarTrigger>
+            <EllipsisVertical
+              color='#65768c'
+              className='absolute top-[30px] right-5 mr-[-15px] cursor-pointer'
+              onClick={() => {
+                // alert('menu btn clicked');
+              }}
+            />
+          </MenubarTrigger>
+          <MenubarContent className='absolute top-8 left-[400px]'>
+            <MenubarItem
+              onClick={() => {
+                alert('edit');
+              }}
+            >
+              {' '}
+              Edit
+            </MenubarItem>
+            <MenubarSeparator />
+
+            <MenubarItem>Archive</MenubarItem>
+
+            <MenubarItem
+              onClick={() => {
+                alert('delete');
+              }}
+            >
+              Delete
+            </MenubarItem>
+          </MenubarContent>
+        </MenubarMenu>
+      </Menubar>
       <NavLink
         to='#'
         onClick={() => {
           alert('Symptom Card Clicked');
         }}
       >
-        <Card className='mb-2 max-w-[410px] '>
+        <Card className=' max-w-[410px] '>
           <CardHeader className='flex flex-row place-content-between align-top text-left'>
             <div className=''>
               <CardDescription className='mb-2'>{props.date}</CardDescription>
@@ -48,7 +83,7 @@ export default function SymptomCard(props) {
             <Separator className='w-[70%] flex flex-row justify-center' />
           </div>
           <CardContent>
-            <p className='text-left truncate'>{props.note}</p>
+            <p className='text-left line-clamp-2 '>{props.note}</p>
           </CardContent>
         </Card>
       </NavLink>
