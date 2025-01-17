@@ -1,5 +1,4 @@
 'use client';
-import { useState } from 'react';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -18,7 +17,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { format } from 'date-fns';
-import { Tag, TagInput } from 'emblor';
 import {
   Popover,
   PopoverContent,
@@ -36,11 +34,14 @@ const formSchema = z.object({
   date: z.coerce.date(),
   name: z.string(),
   severity: z.number().min(1).max(10).default(5),
-  duration: z.number().min(1).max(24).default(1).optional(),
+  duration: z.number().min(0.5).max(24).default(1).optional(),
   stressLevel: z.number().min(1).max(10).default(5).optional(),
   areaOne: z.string(),
   areaTwo: z.string().optional(),
   areaThree: z.string().optional(),
+  medicationOne: z.string().optional(),
+  medicationTwo: z.string().optional(),
+  medicationThree: z.string().optional(),
   notes: z.string().optional(),
 });
 
@@ -88,7 +89,6 @@ export default function DataForm() {
       >
         {/* //& DATE - auto selects time including seconds */}
         {/* FIXME: time is sometimes incorrect */}
-        {/* FIXME: color issues when opening calendar */}
         <FormField
           control={form.control}
           name='date'
@@ -180,23 +180,6 @@ export default function DataForm() {
         <div className='grid grid-cols-12 gap-4 text-left'>
           <div className='col-span-6'>
             {/* //& DURATION SLIDER */}
-            {/* <FormField
-              control={form.control}
-              name='duration'
-              render={({ field }) => (
-                <FormItem className='mb-6'>
-                  <FormLabel>Duration</FormLabel>
-                  <FormControl>
-                    <Input placeholder='' type='text' {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    How long did you experience this symptom?
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
-
             <FormField
               control={form.control}
               name='duration'
@@ -207,7 +190,7 @@ export default function DataForm() {
                   } `}</FormLabel>
                   <FormControl>
                     <Slider
-                      min={1}
+                      min={0.5}
                       max={24}
                       step={0.5}
                       defaultValue={[1]}
@@ -308,7 +291,7 @@ export default function DataForm() {
                   <FormControl>
                     <Input
                       className='placeholder:opacity-60'
-                      placeholder='Skin'
+                      placeholder=''
                       type='text'
                       {...field}
                     />
@@ -318,6 +301,74 @@ export default function DataForm() {
               )}
             />
           </div>
+
+          {/* //& MEDICATIONS */}
+
+          <div className='col-span-6'>
+            {/* //^  MEDICATION ONE */}
+            <FormField
+              control={form.control}
+              name='medicationOne'
+              render={({ field }) => (
+                <FormItem className='mb-6 text-left  max-w-[200px]'>
+                  <FormLabel>Medication(s)</FormLabel>
+                  <FormDescription>
+                    Medication taken for treatment
+                  </FormDescription>
+                  <FormControl>
+                    <Input
+                      className='placeholder:opacity-60'
+                      placeholder='Tylenol'
+                      type='text'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* //^  MEDICATION TWO */}
+
+            <FormField
+              control={form.control}
+              name='medicationTwo'
+              render={({ field }) => (
+                <FormItem className='mb-6 text-left  max-w-[200px]'>
+                  <FormControl>
+                    <Input
+                      className='placeholder:opacity-60'
+                      placeholder='Benadryl'
+                      type='text'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* //^  MEDICATION THREE */}
+
+            <FormField
+              control={form.control}
+              name='medicationThree'
+              render={({ field }) => (
+                <FormItem className='mb-6 text-left max-w-[200px]'>
+                  <FormControl>
+                    <Input
+                      className='placeholder:opacity-60'
+                      placeholder=''
+                      type='text'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
           {/* //& NOTES */}
           <div className='col-span-6'>
             <FormField
