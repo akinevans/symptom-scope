@@ -1,81 +1,59 @@
+import { useState, useEffect } from 'react';
 import { SidebarMenu } from '@/components/SidebarMenu';
 import SymptomCard from '@/components/SymptomCard';
 import DataForm from '@/components/DataForm';
+import supabase from '../supabase-client';
 
 // TODO:  add multi select to form (medications, triggers / cause etc)
 
 export default function TrackingPage() {
-  const severityData = [
-    {
-      title: 'Changes in vision',
-      note: 'Alterations in visual acuity, clarity, or perception. Blurriness, double vision, blind spots.',
-      severityTitle: 'Mild',
-      color: 'text-[#2D5101] bg-[#C0DD78]',
-    },
-    {
-      title: 'Tooth Ache',
-      note: 'Pain when chewing that worsens when drinking cold liquids. Pain seems to subside after a few minutes',
-      severityTitle: 'Moderate',
-      color: 'text-[#6D3A00] bg-[#F5CD6F]',
-    },
-    {
-      title: 'Back pain',
-      note: 'Tight muscles and some tenderness. Difficulty standing and walking',
-      severityTitle: 'Severe',
-      color: ' text-[#81371E] bg-[#F3C6BA]',
-    },
-    {
-      title: 'Sore throat',
-      note: 'Pain, scratchiness, or irritation of the throat that worsens when swallowing.',
-      severityTitle: 'Very Severe',
-      color: ' text-[#8C161E] bg-[#FFC3C9]',
-    },
-  ];
+  const [symptomCards, setSymptomCards] = useState([]);
 
-  const getSeverityData = () => {
-    const randomNum = Math.floor(Math.random() * severityData.length);
-    return severityData[randomNum];
-  };
+  const getData = async () => {
+    const { data, error } = await supabase.from('symptomTable').select('*');
 
-  function getRandomDate(): string {
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    const randomDay = Math.floor(Math.random() * 28) + 1; // To ensure a valid day
-    const randomMonth = months[Math.floor(Math.random() * months.length)];
-    const randomYear = Math.floor(Math.random() * 7) + 2018;
-
-    return `${randomMonth} ${randomDay} ${randomYear}`;
-  }
-
-  const generateSymptomCards = (amount: number) => {
-    const symptomCards = [];
-    for (let i = 0; i < amount; i++) {
-      const data = getSeverityData();
-
-      symptomCards.push(
-        <SymptomCard
-          date={getRandomDate()}
-          title={data.title}
-          severityColor={data.color}
-          severityTitle={data.severityTitle}
-          note={data.note}
-        />
-      );
+    if (error) {
+      console.log(error);
+    } else {
+      setSymptomCards(data);
     }
-    return symptomCards;
   };
+
+  const getSeverityBadge = (value: number): string[] => {
+    const severities = [
+      { title: 'Mild', color: 'text-[#2D5101] bg-[#C0DD78]', range: [1, 3] },
+      {
+        title: 'Moderate',
+        color: 'text-[#6D3A00] bg-[#F5CD6F]',
+        range: [4, 6],
+      },
+      { title: 'Severe', color: 'text-[#81371E] bg-[#F3C6BA]', range: [7, 8] },
+      {
+        title: 'Very Severe',
+        color: 'text-[#8C161E] bg-[#FFC3C9]',
+        range: [9, 10],
+      },
+      {
+        title: 'Error',
+        color: 'text-[#000] bg-[#EEE]',
+        range: [11, 100],
+      },
+    ];
+
+    for (const severity of severities) {
+      if (value >= severity.range[0] && value <= severity.range[1]) {
+        return [severity.title, severity.color];
+      }
+    }
+
+    // Error badge
+    return [severities[4].title, severities[4].color];
+  };
+
+  // FIXME: use a fetch hook not useEffect
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <div className='flex flex-row max-h-[90vh] '>
@@ -83,7 +61,16 @@ export default function TrackingPage() {
         <SidebarMenu />
 
         <div className='flex flex-col gap-y-2 overflow-y-scroll scroll-smooth'>
-          {generateSymptomCards(15)}
+          {symptomCards.map((entry) => (
+            <SymptomCard
+              key={entry.id}
+              date={entry.date}
+              title={entry.name}
+              severityColor={getSeverityBadge(entry.severity)[1]}
+              severityTitle={getSeverityBadge(entry.severity)[0]}
+              note={entry.notes}
+            />
+          ))}
         </div>
       </div>
       <DataForm />
