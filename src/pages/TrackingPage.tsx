@@ -6,6 +6,8 @@ import supabase from '../supabase-client';
 
 // TODO:  add multi select to form (medications, triggers / cause etc)
 
+//^FIXME:  Lift state up to parent (Tracking Page) in order to send individual card ID to the form, and populate it with the cards data
+
 export default function TrackingPage() {
   const [symptomCards, setSymptomCards] = useState([]);
 
@@ -20,10 +22,7 @@ export default function TrackingPage() {
   };
 
   const deleteData = async (id: number) => {
-    const { data, error } = await supabase
-      .from('symptomTable')
-      .delete()
-      .eq('id', id);
+    const { error } = await supabase.from('symptomTable').delete().eq('id', id);
 
     if (error) {
       console.log(error);
