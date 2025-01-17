@@ -5,6 +5,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import supabase from '../supabase-client';
+
 import {
   Form,
   FormControl,
@@ -28,7 +30,7 @@ import { Textarea } from '@/components/ui/textarea';
 
 const formSchema = z.object({
   date: z.coerce.date(),
-  symptom: z.string(),
+  name: z.string(),
   severity: z.number().min(1).max(10).default(5),
   duration: z.string().min(0).optional(),
   stressLevel: z.number().min(1).max(10).default(5),
@@ -44,9 +46,23 @@ export default function DataForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    //FIXME: reapply RLS row-level security in supabase table later
     try {
-      console.log(values);
+      const { data, error } = await supabase
+        .from('symptomTable')
+        .insert([values])
+        .single();
+
+      if (error) {
+        console.log(error);
+      }
+      console.log(data);
+
+      ///
+      ///
+
+      // console.log(values);
       toast(
         <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
           <code className='text-white'>{JSON.stringify(values, null, 2)}</code>
@@ -56,7 +72,7 @@ export default function DataForm() {
       console.error('Form submission error', error);
       toast.error('Failed to submit the form. Please try again.');
     }
-  }
+  };
 
   return (
     <Form {...form}>
@@ -111,7 +127,7 @@ export default function DataForm() {
             {/* //& SYMPTOM TITLE */}
             <FormField
               control={form.control}
-              name='symptom'
+              name='name'
               render={({ field }) => (
                 <FormItem className='mb-6'>
                   <FormLabel className=''>Symptom</FormLabel>
