@@ -18,6 +18,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { format } from 'date-fns';
+import { Tag, TagInput } from 'emblor';
 import {
   Popover,
   PopoverContent,
@@ -35,7 +36,7 @@ const formSchema = z.object({
   date: z.coerce.date(),
   name: z.string(),
   severity: z.number().min(1).max(10).default(5),
-  duration: z.string().min(0).optional(),
+  duration: z.number().min(1).max(24).default(1).optional(),
   stressLevel: z.number().min(1).max(10).default(5).optional(),
   areaOne: z.string(),
   areaTwo: z.string().optional(),
@@ -178,8 +179,8 @@ export default function DataForm() {
         </div>
         <div className='grid grid-cols-12 gap-4 text-left'>
           <div className='col-span-6'>
-            {/* //& DURATION */}
-            <FormField
+            {/* //& DURATION SLIDER */}
+            {/* <FormField
               control={form.control}
               name='duration'
               render={({ field }) => (
@@ -190,6 +191,33 @@ export default function DataForm() {
                   </FormControl>
                   <FormDescription>
                     How long did you experience this symptom?
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            /> */}
+
+            <FormField
+              control={form.control}
+              name='duration'
+              render={({ field: { value, onChange } }) => (
+                <FormItem>
+                  <FormLabel>{`Duration - ${value || 1} ${
+                    value && value > 1 ? 'Hours' : 'Hour'
+                  } `}</FormLabel>
+                  <FormControl>
+                    <Slider
+                      min={1}
+                      max={24}
+                      step={0.5}
+                      defaultValue={[1]}
+                      onValueChange={(vals) => {
+                        onChange(vals[0]);
+                      }}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Adjust the value by sliding left or right.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
