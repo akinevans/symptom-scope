@@ -19,6 +19,19 @@ export default function TrackingPage() {
     }
   };
 
+  const deleteData = async (id: number) => {
+    const { data, error } = await supabase
+      .from('symptomTable')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.log(error);
+    } else {
+      setSymptomCards((prev) => prev.filter((entry) => entry.id !== id));
+    }
+  };
+
   const getSeverityBadge = (value: number): string[] => {
     const severities = [
       { title: 'Mild', color: 'text-[#2D5101] bg-[#C0DD78]', range: [1, 3] },
@@ -69,6 +82,9 @@ export default function TrackingPage() {
               severityColor={getSeverityBadge(entry.severity)[1]}
               severityTitle={getSeverityBadge(entry.severity)[0]}
               note={entry.notes}
+              delete={() => {
+                deleteData(entry.id);
+              }}
             />
           ))}
         </div>

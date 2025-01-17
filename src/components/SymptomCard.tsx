@@ -48,13 +48,7 @@ export default function SymptomCard(props) {
 
             <MenubarItem>Archive</MenubarItem>
 
-            <MenubarItem
-              onClick={() => {
-                alert('delete');
-              }}
-            >
-              Delete
-            </MenubarItem>
+            <MenubarItem onClick={props.delete}>Delete</MenubarItem>
           </MenubarContent>
         </MenubarMenu>
       </Menubar>
