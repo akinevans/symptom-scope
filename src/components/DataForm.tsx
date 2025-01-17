@@ -1,4 +1,5 @@
 'use client';
+import { useState } from 'react';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,6 +18,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { format } from 'date-fns';
+import { Tag, TagInput } from 'emblor';
 import {
   Popover,
   PopoverContent,
@@ -36,11 +38,16 @@ const formSchema = z.object({
   severity: z.number().min(1).max(10).default(5),
   duration: z.string().min(0).optional(),
   stressLevel: z.number().min(1).max(10).default(5).optional(),
-  affectedArea: z.string(),
+  affectedArea: z.any(),
   notes: z.string().optional(),
 });
 
 export default function DataForm() {
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null);
+  console.log(tags);
+  const { control, setValue } = useForm();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -226,7 +233,7 @@ export default function DataForm() {
         {/* //& AFFECTED AREAS */}
         <div className='grid grid-cols-12 gap-4 text-left'>
           <div className='col-span-6'>
-            <FormField
+            {/* <FormField
               control={form.control}
               name='affectedArea'
               render={({ field }) => (
@@ -239,6 +246,29 @@ export default function DataForm() {
                     Where did the symptom occur? E.g. hands, face
                   </FormDescription>
                   <FormMessage />
+                </FormItem>
+              )}
+            /> */}
+            <FormField
+              control={form.control}
+              name='affectedArea'
+              render={({ field }) => (
+                <FormItem className='mb-6 text-left'>
+                  <FormLabel>Affected Area(s)</FormLabel>
+                  <FormControl>
+                    <TagInput
+                      {...field}
+                      placeholder='Type an area, then press enter'
+                      styleClasses={{ inlineTagsContainer: 'p-4' }}
+                      tags={tags}
+                      setTags={(newTags) => {
+                        setTags(newTags);
+                        setValue('topics', newTags as [Tag, ...Tag[]]);
+                      }}
+                      activeTagIndex={activeTagIndex}
+                      setActiveTagIndex={setActiveTagIndex}
+                    />
+                  </FormControl>
                 </FormItem>
               )}
             />
