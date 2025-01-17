@@ -36,7 +36,9 @@ const formSchema = z.object({
   severity: z.number().min(1).max(10).default(5),
   duration: z.string().min(0).optional(),
   stressLevel: z.number().min(1).max(10).default(5).optional(),
-  affectedArea: z.string(),
+  areaOne: z.string(),
+  areaTwo: z.string().optional(),
+  areaThree: z.string().optional(),
   notes: z.string().optional(),
 });
 
@@ -226,18 +228,62 @@ export default function DataForm() {
         {/* //& AFFECTED AREAS */}
         <div className='grid grid-cols-12 gap-4 text-left'>
           <div className='col-span-6'>
+            {/* //^ AREA ONE */}
             <FormField
               control={form.control}
-              name='affectedArea'
+              name='areaOne'
               render={({ field }) => (
-                <FormItem className='mb-6 text-left'>
+                <FormItem className='mb-6 text-left  max-w-[200px]'>
                   <FormLabel>Affected Area(s)</FormLabel>
-                  <FormControl>
-                    <Input placeholder='' type='text' {...field} />
-                  </FormControl>
                   <FormDescription>
                     Where did the symptom occur? E.g. hands, face
                   </FormDescription>
+                  <FormControl>
+                    <Input
+                      className='placeholder:opacity-60'
+                      placeholder='Hands'
+                      type='text'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* //^ AREA TWO */}
+            <FormField
+              control={form.control}
+              name='areaTwo'
+              render={({ field }) => (
+                <FormItem className='mb-6 text-left  max-w-[200px]'>
+                  <FormControl>
+                    <Input
+                      className='placeholder:opacity-60'
+                      placeholder='Face'
+                      type='text'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* //^ AREA THREE */}
+            <FormField
+              control={form.control}
+              name='areaThree'
+              render={({ field }) => (
+                <FormItem className='mb-6 text-left max-w-[200px]'>
+                  <FormControl>
+                    <Input
+                      className='placeholder:opacity-60'
+                      placeholder='Skin'
+                      type='text'
+                      {...field}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
