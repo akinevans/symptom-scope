@@ -29,13 +29,15 @@ import { Slider } from '@/components/ui/slider';
 import { Textarea } from '@/components/ui/textarea';
 
 const formSchema = z.object({
+  // ^ to make an input REQUIRED, remove the optional method below
+  //! if it is NULLABLE in the table it MUST be optional here
   date: z.coerce.date(),
   name: z.string(),
   severity: z.number().min(1).max(10).default(5),
   duration: z.string().min(0).optional(),
-  stressLevel: z.number().min(1).max(10).default(5),
-  affectedArea: z.string().optional(),
-  notes: z.string(),
+  stressLevel: z.number().min(1).max(10).default(5).optional(),
+  affectedArea: z.string(),
+  notes: z.string().optional(),
 });
 
 export default function DataForm() {
