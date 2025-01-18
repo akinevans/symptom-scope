@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { MyBarChart } from '@/components/charts/MyBarChart';
 import supabase from '../supabase-client';
 import {
   Card,
@@ -98,6 +99,7 @@ export default function DashboardPage() {
           </CardFooter> */}
         </Card>
       </div>
+      <MyBarChart />
     </div>
   );
 }
