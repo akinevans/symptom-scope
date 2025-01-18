@@ -34,8 +34,8 @@ const formSchema = z.object({
   date: z.coerce.date(),
   name: z.string(),
   severity: z.number().min(1).max(10).default(5),
-  duration: z.number().min(0.5).max(24).default(1).optional(),
-  stressLevel: z.number().min(1).max(10).default(5).optional(),
+  duration: z.number().min(0.5).max(24).default(1),
+  stressLevel: z.number().min(1).max(10).default(2),
   areaOne: z.string(),
   areaTwo: z.string().optional(),
   areaThree: z.string().optional(),
@@ -314,7 +314,7 @@ export default function DataForm() {
               name='stressLevel'
               render={({ field: { value, onChange } }) => (
                 <FormItem>
-                  <FormLabel>Stress Level - {value || 5}</FormLabel>
+                  <FormLabel>Stress Level - {value || 2}</FormLabel>
                   <FormDescription>
                     Adjust by sliding left or right.
                   </FormDescription>
@@ -323,7 +323,7 @@ export default function DataForm() {
                       min={1}
                       max={10}
                       step={1}
-                      defaultValue={[5]}
+                      defaultValue={[2]}
                       onValueChange={(vals) => {
                         onChange(vals[0]);
                       }}

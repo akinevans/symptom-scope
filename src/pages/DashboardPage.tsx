@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { DashBarChart } from '@/components/charts/DashBarChart';
 import supabase from '../supabase-client';
-import { formatMonth } from '@/utility_functions/utility_functions';
+import {
+  formatMonth,
+  monthNumToWord,
+} from '@/utility_functions/utility_functions';
 import {
   Card,
   CardContent,
@@ -35,7 +38,11 @@ export default function DashboardPage() {
     return Array.from(trackedItems);
   };
 
+  const currentYear = new Date().getFullYear().toString();
+
   const generateChartData = (data) => {
+    console.clear();
+    //FIXME: only show current year, as of now it does not differentiate the months in the year
     const chartData: any[] = [];
     const months: string[] = [
       'JAN',
@@ -58,27 +65,112 @@ export default function DashboardPage() {
     }
 
     symptom.map((entry) => {
-      if (entry.stressLevel) {
-        const date = entry.date;
-        const month = formatMonth(date.slice(5, 7));
-        // chartData.push({ month: formatMonth(month), level: entry.stressLevel });
+      const entryYear = entry.date.substring(0, 4);
 
+      //check if we are looking at the current year
+      if (entryYear === currentYear) {
+        if (entry.stressLevel) {
+          // TODO: process each month, then get the average stress level, push into chartData
+
+          // get the current entries month as '02' for example
+          const monthAsNumericalString = entry.date.substring(5, 7);
+
+          //see if multiple entries exist on that month (year already taken care of)
+          // processMultipleEntries(data, monthAsNumericalString);
+
+          //get averages for each month
+          const averages = getAverages(
+            processMultipleEntries(data, monthAsNumericalString)
+          );
+
+          console.log(averages);
+
+          const date = entry.date;
+          const month = formatMonth(date.slice(5, 7));
+
+          for (let i = 0; i < chartData.length; i++) {
+            if (chartData[i].month === month) {
+              chartData[i].level = entry.stressLevel;
+            }
+          }
+
+          // update chartData with the averages
+          for (let i = 0; i < averages.length; i++) {
+            const currentMonth = monthNumToWord(averages[i].month);
+            console.log(currentMonth);
+            if (chartData[i].month !== currentMonth) {
+              continue;
+            } else {
+              chartData[i].level = averages[i].average;
+            }
+          }
+        }
+
+        // if level is not yet in the array, stressLevel is null in the DB, set it to zero
         for (let i = 0; i < chartData.length; i++) {
-          if (chartData[i].month === month) {
-            chartData[i].level = entry.stressLevel;
+          if (!chartData[i].level) {
+            chartData[i].level = 'No data';
           }
         }
       }
-      // if level is not yet in the array, stressLevel is null in the DB, set it to zero
+    });
 
-      for (let i = 0; i < chartData.length; i++) {
-        if (!chartData[i].level) {
-          chartData[i].level = 'No data';
+    console.log(chartData);
+    return chartData;
+  };
+
+  const getAverages = (list) => {
+    const monthData = {};
+
+    list.forEach((entry) => {
+      const month = entry.month;
+      if (!monthData[month]) {
+        monthData[month] = { total: 0, count: 0 };
+      }
+      monthData[month].total += entry.level;
+      monthData[month].count += 1;
+    });
+
+    const averages = Object.keys(monthData).map((month) => {
+      const calculatedAverage = monthData[month].total / monthData[month].count;
+      return {
+        month: Number(month),
+        average: calculatedAverage.toFixed(1),
+      };
+    });
+
+    return averages;
+  };
+  const processMultipleEntries = (data, month) => {
+    const list: any[] = [];
+
+    // console.log(data);
+    // console.log(month);
+    // see if multiple entries exist for each month
+
+    data.map((entry) => {
+      const dataYear = entry.date.substring(0, 4);
+      const dataMonth = entry.date.substring(5, 7);
+      // console.log('dataYear: ', dataYear);
+
+      // ensure correct year
+      if (dataYear === currentYear && entry.stressLevel) {
+        // loop for each month
+        const dataMonth = entry.date.substring(5, 7);
+        const wantedDate = `${currentYear}-${dataMonth}`;
+        // console.log('dataMonth: ', dataMonth);
+        // console.log('wantedDate: ', wantedDate);
+
+        if (entry.date.substring(0, 7) === wantedDate) {
+          list.push({
+            month: Number(dataMonth),
+            level: entry.stressLevel,
+          });
         }
       }
     });
-    console.log(chartData);
-    return chartData;
+    // console.log(list);
+    return list;
   };
 
   const getData = async () => {
@@ -146,8 +238,8 @@ export default function DashboardPage() {
       </div>
 
       <DashBarChart
-        title='Stress Levels'
-        description='January - December (year?)'
+        title='Average Stress Levels'
+        description={`January - December ${currentYear}`}
         chartData={generateChartData(symptom)}
       />
     </div>

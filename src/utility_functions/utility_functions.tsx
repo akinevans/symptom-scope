@@ -8,7 +8,9 @@ export const formatFullDate = (date: string): string => {
   return `${formatMonth(monthNum)} ${dayNum}, ${yearNum}`;
 };
 
-export const formatMonth = (monthNum: string): string => {
+//formats month number as STRING  to abbreviation
+// example "01" = JAN
+export const formatMonth = (monthNum): string => {
   // Abbreviate month
   let monthName: string = '';
 
@@ -54,4 +56,37 @@ export const formatMonth = (monthNum: string): string => {
       console.log('Invalid month abbreviation');
   }
   return monthName;
+};
+
+// translate month of type NUMBER, to abbreviation
+//  01 = JAN, 12 = DEC
+export const monthNumToWord = (month: number) => {
+  switch (month) {
+    case 1:
+      return 'JAN';
+    case 2:
+      return 'FEB';
+    case 3:
+      return 'MAR';
+    case 4:
+      return 'APR';
+    case 5:
+      return 'MAY';
+    case 6:
+      return 'JUN';
+    case 7:
+      return 'JUL';
+    case 8:
+      return 'AUG';
+    case 9:
+      return 'SEP';
+    case 10:
+      return 'OCT';
+    case 11:
+      return 'NOV';
+    case 12:
+      return 'DEC';
+    default:
+      return 'Invalid month';
+  }
 };
