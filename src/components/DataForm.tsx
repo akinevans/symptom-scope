@@ -43,6 +43,7 @@ const formSchema = z.object({
   medicationOne: z.string().optional(),
   medicationTwo: z.string().optional(),
   medicationThree: z.string().optional(),
+  medicationFour: z.string().optional(),
   notes: z.string().optional(),
 });
 
@@ -137,12 +138,13 @@ export default function DataForm() {
               render={({ field }) => (
                 <FormItem className='mb-6'>
                   <FormLabel className=''>Symptom *</FormLabel>
-                  <FormControl>
-                    <Input placeholder='' type='text' {...field} />
-                  </FormControl>
                   <FormDescription>
                     What symptom are you experiencing?
                   </FormDescription>
+                  <FormControl>
+                    <Input placeholder='' type='text' {...field} />
+                  </FormControl>
+
                   <FormMessage />
                 </FormItem>
               )}
@@ -157,6 +159,9 @@ export default function DataForm() {
               render={({ field: { value, onChange } }) => (
                 <FormItem>
                   <FormLabel>Severity - {value || 5}</FormLabel>
+                  <FormDescription>
+                    Adjust by sliding left or right.
+                  </FormDescription>
                   <FormControl>
                     <Slider
                       min={1}
@@ -168,9 +173,7 @@ export default function DataForm() {
                       }}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Adjust the value by sliding left or right.
-                  </FormDescription>
+
                   <FormMessage />
                 </FormItem>
               )}
@@ -180,16 +183,21 @@ export default function DataForm() {
 
         {/* //& AFFECTED AREAS */}
 
-        <div className='grid grid-cols-12 gap-4 text-left'>
+        <div className='grid grid-cols-12 gap-4  text-left'>
           <div className='col-span-6'>
             <FormField
               control={form.control}
               name='areaOne'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Affected Area(s)</FormLabel>
+                  <FormLabel>Affected Area(s) *</FormLabel>
                   <FormControl>
-                    <Input placeholder='Hands' type='' {...field} />
+                    <Input
+                      className='placeholder:opacity-60'
+                      placeholder='Hands'
+                      type=''
+                      {...field}
+                    />
                   </FormControl>
 
                   <FormMessage />
@@ -206,7 +214,12 @@ export default function DataForm() {
                 <FormItem>
                   <FormLabel className='invisible'>hidden</FormLabel>
                   <FormControl>
-                    <Input placeholder='Face' type='' {...field} />
+                    <Input
+                      className='placeholder:opacity-60'
+                      placeholder='Face'
+                      type=''
+                      {...field}
+                    />
                   </FormControl>
 
                   <FormMessage />
@@ -225,7 +238,12 @@ export default function DataForm() {
                 <FormItem>
                   <FormLabel></FormLabel>
                   <FormControl>
-                    <Input placeholder='Back' type='' {...field} />
+                    <Input
+                      className='placeholder:opacity-60'
+                      placeholder=''
+                      type=''
+                      {...field}
+                    />
                   </FormControl>
 
                   <FormMessage />
@@ -242,7 +260,12 @@ export default function DataForm() {
                 <FormItem>
                   <FormLabel></FormLabel>
                   <FormControl>
-                    <Input placeholder='Skin' type='' {...field} />
+                    <Input
+                      className='placeholder:opacity-60'
+                      placeholder=''
+                      type=''
+                      {...field}
+                    />
                   </FormControl>
 
                   <FormMessage />
@@ -252,7 +275,7 @@ export default function DataForm() {
           </div>
         </div>
 
-        <div className='grid grid-cols-12 gap-4 text-left'>
+        <div className='grid grid-cols-12 gap-4 mt-8 text-left'>
           <div className='col-span-6'>
             {/* //& DURATION SLIDER */}
             <FormField
@@ -263,6 +286,9 @@ export default function DataForm() {
                   <FormLabel>{`Duration - ${value || 1} ${
                     value && value > 1 ? 'Hours' : 'Hour'
                   } `}</FormLabel>
+                  <FormDescription>
+                    Adjust by sliding left or right.
+                  </FormDescription>
                   <FormControl>
                     <Slider
                       min={0.5}
@@ -274,9 +300,7 @@ export default function DataForm() {
                       }}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Adjust the value by sliding left or right.
-                  </FormDescription>
+
                   <FormMessage />
                 </FormItem>
               )}
@@ -291,6 +315,9 @@ export default function DataForm() {
               render={({ field: { value, onChange } }) => (
                 <FormItem>
                   <FormLabel>Stress Level - {value || 5}</FormLabel>
+                  <FormDescription>
+                    Adjust by sliding left or right.
+                  </FormDescription>
                   <FormControl>
                     <Slider
                       min={1}
@@ -302,9 +329,7 @@ export default function DataForm() {
                       }}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Adjust the value by sliding left or right.
-                  </FormDescription>
+
                   <FormMessage />
                 </FormItem>
               )}
@@ -312,82 +337,118 @@ export default function DataForm() {
           </div>
         </div>
 
-        <div className='grid grid-cols-12 gap-4 text-left'>
-          {/* //& MEDICATIONS */}
+        {/* //& MEDICATIONS */}
 
+        <div className='grid grid-cols-12 gap-4 mt-8 text-left'>
           <div className='col-span-6'>
-            {/* //^  MEDICATION ONE */}
             <FormField
               control={form.control}
               name='medicationOne'
               render={({ field }) => (
-                <FormItem className='mb-6 text-left  max-w-[200px]'>
+                <FormItem>
                   <FormLabel>Medication(s)</FormLabel>
                   <FormDescription>
-                    Medication taken for treatment
+                    What have you used for treatment?
                   </FormDescription>
                   <FormControl>
                     <Input
                       className='placeholder:opacity-60'
                       placeholder='Tylenol'
-                      type='text'
+                      type=''
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
-            {/* //^  MEDICATION TWO */}
-
-            <FormField
-              control={form.control}
-              name='medicationTwo'
-              render={({ field }) => (
-                <FormItem className='mb-6 text-left  max-w-[200px]'>
-                  <FormControl>
-                    <Input
-                      className='placeholder:opacity-60'
-                      placeholder='Benadryl'
-                      type='text'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* //^  MEDICATION THREE */}
-
-            <FormField
-              control={form.control}
-              name='medicationThree'
-              render={({ field }) => (
-                <FormItem className='mb-6 text-left max-w-[200px]'>
-                  <FormControl>
-                    <Input
-                      className='placeholder:opacity-60'
-                      placeholder=''
-                      type='text'
-                      {...field}
-                    />
-                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
 
-          {/* //& NOTES */}
           <div className='col-span-6'>
+            <FormField
+              control={form.control}
+              name='medicationTwo'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className='invisible'>hidden</FormLabel>
+                  <FormDescription className='invisible'>
+                    hidden
+                  </FormDescription>
+                  <FormControl>
+                    <Input
+                      className='placeholder:opacity-60'
+                      placeholder='Benadryl'
+                      type=''
+                      {...field}
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        <div className='grid grid-cols-12 gap-4'>
+          <div className='col-span-6'>
+            <FormField
+              control={form.control}
+              name='medicationThree'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel></FormLabel>
+                  <FormControl>
+                    <Input
+                      className='placeholder:opacity-60'
+                      placeholder=''
+                      type=''
+                      {...field}
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className='col-span-6'>
+            <FormField
+              control={form.control}
+              name='medicationFour'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel></FormLabel>
+                  <FormControl>
+                    <Input
+                      className='placeholder:opacity-60'
+                      placeholder=''
+                      type=''
+                      {...field}
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        <div className='grid grid-cols-12 gap-4 mt-8 text-left'>
+          {/* //& NOTES */}
+          <div className='col-span-12'>
             <FormField
               control={form.control}
               name='notes'
               render={({ field }) => (
                 <FormItem className='mb-6 text-left'>
                   <FormLabel>Notes</FormLabel>
+                  <FormDescription>
+                    Any extra notes that may be relevant.
+                  </FormDescription>
                   <FormControl>
                     <Textarea
                       placeholder=''
@@ -395,9 +456,7 @@ export default function DataForm() {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Any extra notes that may be relevant.
-                  </FormDescription>
+
                   <FormMessage />
                 </FormItem>
               )}
