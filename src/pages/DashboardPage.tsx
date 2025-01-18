@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { MyBarChart } from '@/components/charts/MyBarChart';
+import { DashBarChart } from '@/components/charts/DashBarChart';
 import supabase from '../supabase-client';
+import { formatMonth } from '@/utility_functions/utility_functions';
 import {
   Card,
   CardContent,
@@ -34,6 +35,52 @@ export default function DashboardPage() {
     return Array.from(trackedItems);
   };
 
+  const generateChartData = (data) => {
+    const chartData: any[] = [];
+    const months: string[] = [
+      'JAN',
+      'FEB',
+      'MAR',
+      'APR',
+      'MAY',
+      'JUN',
+      'JUL',
+      'AUG',
+      'SEP',
+      'OCT',
+      'NOV',
+      'DEC',
+    ];
+
+    // Place all months in the chardData arr
+    for (let i = 0; i < months.length; i++) {
+      chartData.push({ month: months[i] });
+    }
+
+    symptom.map((entry) => {
+      if (entry.stressLevel) {
+        const date = entry.date;
+        const month = formatMonth(date.slice(5, 7));
+        // chartData.push({ month: formatMonth(month), level: entry.stressLevel });
+
+        for (let i = 0; i < chartData.length; i++) {
+          if (chartData[i].month === month) {
+            chartData[i].level = entry.stressLevel;
+          }
+        }
+      }
+      // if level is not yet in the array, stressLevel is null in the DB, set it to zero
+
+      for (let i = 0; i < chartData.length; i++) {
+        if (!chartData[i].level) {
+          chartData[i].level = 'No data';
+        }
+      }
+    });
+    console.log(chartData);
+    return chartData;
+  };
+
   const getData = async () => {
     const { data, error } = await supabase.from('symptomTable').select('*');
 
@@ -52,8 +99,6 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <h1>Dashboard Page</h1>
-
       <div className='flex flex-row flex-wrap gap-2'>
         <Card className='w-fit'>
           <CardHeader>
@@ -99,7 +144,12 @@ export default function DashboardPage() {
           </CardFooter> */}
         </Card>
       </div>
-      <MyBarChart />
+
+      <DashBarChart
+        title='Stress Levels'
+        description='January - December (year?)'
+        chartData={generateChartData(symptom)}
+      />
     </div>
   );
 }

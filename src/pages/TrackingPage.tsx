@@ -3,6 +3,7 @@ import { SidebarMenu } from '@/components/SidebarMenu';
 import SymptomCard from '@/components/SymptomCard';
 import DataForm from '@/components/DataForm';
 import supabase from '../supabase-client';
+import { formatFullDate } from '@/utility_functions/utility_functions';
 
 // TODO:  add multi select to form (medications, triggers / cause etc)
 
@@ -62,60 +63,6 @@ export default function TrackingPage() {
     return [severities[4].title, severities[4].color];
   };
 
-  const formatDate = (date: string): string => {
-    console.log(date);
-    // FORMAT: MM DD, YYYY
-    let monthName: string = '';
-    const yearNum: string = date.substring(0, 4);
-    const monthNum: string = date.substring(5, 7);
-    const dayNum: string = date.substring(8, 10);
-
-    // Abbreviate month
-    switch (monthNum) {
-      case '01':
-        monthName = 'JAN';
-        break;
-      case '02':
-        monthName = 'FEB';
-        break;
-      case '03':
-        monthName = 'MAR';
-        break;
-      case '04':
-        monthName = 'APR';
-        break;
-      case '05':
-        monthName = 'MAY';
-        break;
-      case '06':
-        monthName = 'JUN';
-        break;
-      case '07':
-        monthName = 'JUL';
-        break;
-      case '08':
-        monthName = 'AUG';
-        break;
-      case '09':
-        monthName = 'SEP';
-        break;
-      case '10':
-        monthName = 'OCT';
-        break;
-      case '11':
-        monthName = 'NOV';
-        break;
-      case '12':
-        monthName = 'DEC';
-        break;
-
-      default:
-        console.log('Invalid month abbreviation');
-    }
-
-    return `${monthName} ${dayNum}, ${yearNum}`;
-  };
-
   // FIXME: use a fetch hook not useEffect
   useEffect(() => {
     getData();
@@ -130,7 +77,7 @@ export default function TrackingPage() {
           {symptomCards.map((entry) => (
             <SymptomCard
               key={entry.id}
-              date={formatDate(entry.date)}
+              date={formatFullDate(entry.date)}
               title={entry.name}
               severityColor={getSeverityBadge(entry.severity)[1]}
               severityTitle={getSeverityBadge(entry.severity)[0]}
