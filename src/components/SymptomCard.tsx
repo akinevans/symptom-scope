@@ -23,7 +23,7 @@ export default function SymptomCard(props) {
   return (
     <div className='relative'>
       {/* //& Menu modal */}
-      {/* //! hidden DOM piece MenuBar, breaks layout of vertical symptom bars */}
+      {/* //! hidden DOM piece MenuBar, breaks layout of vertical ellipses in SymptomCard */}
       <Menubar className='h-0 border-none p-0'>
         <MenubarMenu>
           <MenubarTrigger>
