@@ -39,6 +39,7 @@ const formSchema = z.object({
   areaOne: z.string(),
   areaTwo: z.string().optional(),
   areaThree: z.string().optional(),
+  areaFour: z.string().optional(),
   medicationOne: z.string().optional(),
   medicationTwo: z.string().optional(),
   medicationThree: z.string().optional(),
@@ -88,7 +89,6 @@ export default function DataForm() {
         className='ml-4 p-6 w-[60vw] max-w-[900px]  py-10 bg-white rounded-lg'
       >
         {/* //& DATE - auto selects time including seconds */}
-        {/* FIXME: time is sometimes incorrect */}
         <FormField
           control={form.control}
           name='date'
@@ -136,7 +136,7 @@ export default function DataForm() {
               name='name'
               render={({ field }) => (
                 <FormItem className='mb-6'>
-                  <FormLabel className=''>Symptom</FormLabel>
+                  <FormLabel className=''>Symptom *</FormLabel>
                   <FormControl>
                     <Input placeholder='' type='text' {...field} />
                   </FormControl>
@@ -177,6 +177,81 @@ export default function DataForm() {
             />
           </div>
         </div>
+
+        {/* //& AFFECTED AREAS */}
+
+        <div className='grid grid-cols-12 gap-4 text-left'>
+          <div className='col-span-6'>
+            <FormField
+              control={form.control}
+              name='areaOne'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Affected Area(s)</FormLabel>
+                  <FormControl>
+                    <Input placeholder='Hands' type='' {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className='col-span-6'>
+            <FormField
+              control={form.control}
+              name='areaTwo'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className='invisible'>hidden</FormLabel>
+                  <FormControl>
+                    <Input placeholder='Face' type='' {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        <div className='grid grid-cols-12 gap-4'>
+          <div className='col-span-6'>
+            <FormField
+              control={form.control}
+              name='areaThree'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel></FormLabel>
+                  <FormControl>
+                    <Input placeholder='Back' type='' {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className='col-span-6'>
+            <FormField
+              control={form.control}
+              name='areaFour'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel></FormLabel>
+                  <FormControl>
+                    <Input placeholder='Skin' type='' {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
         <div className='grid grid-cols-12 gap-4 text-left'>
           <div className='col-span-6'>
             {/* //& DURATION SLIDER */}
@@ -237,71 +312,7 @@ export default function DataForm() {
           </div>
         </div>
 
-        {/* //& AFFECTED AREAS */}
         <div className='grid grid-cols-12 gap-4 text-left'>
-          <div className='col-span-6'>
-            {/* //^ AREA ONE */}
-            <FormField
-              control={form.control}
-              name='areaOne'
-              render={({ field }) => (
-                <FormItem className='mb-6 text-left  max-w-[200px]'>
-                  <FormLabel>Affected Area(s)</FormLabel>
-                  <FormDescription>
-                    Where did the symptom occur? E.g. hands, face
-                  </FormDescription>
-                  <FormControl>
-                    <Input
-                      className='placeholder:opacity-60'
-                      placeholder='Hands'
-                      type='text'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* //^ AREA TWO */}
-            <FormField
-              control={form.control}
-              name='areaTwo'
-              render={({ field }) => (
-                <FormItem className='mb-6 text-left  max-w-[200px]'>
-                  <FormControl>
-                    <Input
-                      className='placeholder:opacity-60'
-                      placeholder='Face'
-                      type='text'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* //^ AREA THREE */}
-            <FormField
-              control={form.control}
-              name='areaThree'
-              render={({ field }) => (
-                <FormItem className='mb-6 text-left max-w-[200px]'>
-                  <FormControl>
-                    <Input
-                      className='placeholder:opacity-60'
-                      placeholder=''
-                      type='text'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
           {/* //& MEDICATIONS */}
 
           <div className='col-span-6'>

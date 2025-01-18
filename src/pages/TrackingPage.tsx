@@ -63,6 +63,7 @@ export default function TrackingPage() {
   };
 
   const formatDate = (date: string): string => {
+    console.log(date);
     // FORMAT: MM DD, YYYY
     let monthName: string = '';
     const yearNum: string = date.substring(0, 4);
