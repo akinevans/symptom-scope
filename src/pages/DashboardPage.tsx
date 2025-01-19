@@ -123,7 +123,7 @@ export default function DashboardPage() {
   return (
     <div>
       <div className='flex flex-row flex-wrap gap-2'>
-        <Card className='w-fit'>
+        <Card className='w-fit max-h-[500px] overflow-y-scroll'>
           <CardHeader>
             <CardTitle>Medications</CardTitle>
             <CardDescription>All Tracked Medications</CardDescription>
@@ -147,7 +147,7 @@ export default function DashboardPage() {
           </CardFooter> */}
         </Card>
 
-        <Card className='w-fit'>
+        <Card className='w-fit w-fit max-h-[500px] overflow-y-scroll'>
           <CardHeader>
             <CardTitle>Symptoms</CardTitle>
             <CardDescription>All Tracked Symptoms</CardDescription>
