@@ -27,7 +27,7 @@ const chartConfig = {
 
 export function DashBarChart(props) {
   return (
-    <Card className='mt-2 max-w-[450px]'>
+    <Card className='mt-2 w-full max-w-[450px]'>
       <CardHeader>
         <CardTitle>{props.title}</CardTitle>
         <CardDescription>{props.description}</CardDescription>
