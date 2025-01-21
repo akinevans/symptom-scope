@@ -14,12 +14,12 @@ import {
 } from '@/components/ui/card';
 
 export default function DashboardPage() {
+  console.clear();
   const [symptom, setSymptom] = useState<any[]>([]);
 
   const currentYear = new Date().getFullYear().toString();
 
   const generateChartData = (data: any[], metric: string): any[] => {
-    console.clear();
     // console.log(data);
 
     const months = [
@@ -53,7 +53,7 @@ export default function DashboardPage() {
       if (target) target.level = average;
     });
 
-    console.log(chartData);
+    // console.log(chartData);
     return chartData;
   };
 
@@ -86,6 +86,30 @@ export default function DashboardPage() {
   //     }));
   // };
 
+  const headerMetrics = (data) => {
+    const metrics = [];
+
+    let avgStress: number = 0,
+      avgDuration: number = 0,
+      avgSeverity: number = 0;
+
+    // get average levels
+    for (let i = 0; i < data.length; i++) {
+      avgStress += data[i].stressLevel;
+      avgDuration += data[i].duration;
+      avgSeverity += data[i].severity;
+    }
+    avgStress = avgStress / data.length;
+    avgDuration = avgDuration / data.length;
+    avgSeverity = avgSeverity / data.length;
+
+    return [
+      avgStress.toFixed(2),
+      avgDuration.toFixed(2),
+      avgSeverity.toFixed(2),
+    ];
+  };
+
   const getData = async () => {
     const { data, error } = await supabase.from('symptomTable').select('*');
 
@@ -104,6 +128,9 @@ export default function DashboardPage() {
 
   return (
     <div>
+      <p>Average Stress Level {headerMetrics(symptom)[0]}</p>
+      <p>Average Symptom Duration {headerMetrics(symptom)[1]}</p>
+      <p>Average Symptom Severity {headerMetrics(symptom)[2]}</p>
       <div className='flex flex-row flex-wrap gap-2'>
         <Card className='w-fit max-h-[400px]'>
           <CardHeader>
