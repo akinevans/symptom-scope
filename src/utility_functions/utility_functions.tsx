@@ -90,3 +90,24 @@ export const monthNumToWord = (month: number) => {
       return 'Invalid month';
   }
 };
+
+export const generateTrackedList = (
+  symptom: any[],
+  keys: string[]
+): string[] => {
+  const capitalizeString = (text: string): string =>
+    text
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+
+  const trackedItems = new Set<string>();
+
+  symptom.forEach((s) =>
+    keys.forEach((key) => {
+      if (s[key]) trackedItems.add(capitalizeString(s[key]));
+    })
+  );
+  // sort the list in alphabetical order, then return
+  return Array.from(trackedItems).sort();
+};
