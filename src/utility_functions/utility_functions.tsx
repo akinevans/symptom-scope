@@ -91,6 +91,16 @@ export const monthNumToWord = (month: number) => {
   }
 };
 
+export const getRandomDateIn2025 = () => {
+  const start = new Date(2025, 0, 1); // January 1, 2025
+  const end = new Date(2025, 11, 31); // December 31, 2025
+
+  const randomTimestamp =
+    start.getTime() + Math.random() * (end.getTime() - start.getTime());
+
+  return new Date(randomTimestamp);
+};
+
 export const generateTrackedList = (
   symptom: any[],
   keys: string[]
@@ -141,4 +151,59 @@ export const getSeverityBadge = (value: number): string[] => {
 
   // Error badge
   return [severities[4].title, severities[4].color];
+};
+
+export const generateChartData = (data: any[], metric: string): any[] => {
+  // console.log(data);
+
+  const currentYear = new Date().getFullYear().toString();
+
+  const months = [
+    'JAN',
+    'FEB',
+    'MAR',
+    'APR',
+    'MAY',
+    'JUN',
+    'JUL',
+    'AUG',
+    'SEP',
+    'OCT',
+    'NOV',
+    'DEC',
+  ];
+  const chartData = months.map((month) => ({ month, level: 'No data' }));
+
+  const monthlyEntries = data
+    .filter((entry) => entry.date.startsWith(currentYear) && entry[metric])
+    .map((entry) => ({
+      month: Number(entry.date.substring(5, 7)),
+      level: entry[metric],
+    }));
+
+  const averages = getAverages(monthlyEntries);
+
+  averages.forEach(({ month, average }) => {
+    const monthName = months[month - 1];
+    const target = chartData.find((item) => item.month === monthName);
+    if (target) target.level = average;
+  });
+
+  // console.log(chartData);
+  return chartData;
+};
+
+export const getAverages = (entries: { month: number; level: number }[]) => {
+  const monthData: Record<number, { total: number; count: number }> = {};
+
+  entries.forEach(({ month, level }) => {
+    if (!monthData[month]) monthData[month] = { total: 0, count: 0 };
+    monthData[month].total += level;
+    monthData[month].count += 1;
+  });
+
+  return Object.entries(monthData).map(([month, { total, count }]) => ({
+    month: Number(month),
+    average: (total / count).toFixed(1),
+  }));
 };

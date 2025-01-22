@@ -80,6 +80,7 @@ export default function DataForm() {
     }
     refreshPage();
   };
+
   const placeholderText =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
 
@@ -182,12 +183,12 @@ export default function DataForm() {
           <code className='text-white'>{JSON.stringify(values, null, 2)}</code>
         </pre>
       );
+
+      refreshPage();
     } catch (error) {
       console.error('Form submission error', error);
       toast.error('Failed to submit the form. Please try again.');
     }
-
-    refreshPage();
   };
 
   return (

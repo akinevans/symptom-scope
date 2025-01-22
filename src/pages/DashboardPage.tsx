@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { DashBarChart } from '@/components/charts/DashBarChart';
 import { DashLineChart } from '@/components/charts/DashLineChart';
-import { DashPieChart } from '@/components/charts/DashPieChart';
 import {
   generateTrackedList,
   formatFullDate,
   getSeverityBadge,
+  generateChartData,
 } from '@/utility_functions/utility_functions';
 import SymptomCard from '../components/SymptomCard';
 import supabase from '../supabase-client';
@@ -22,63 +22,8 @@ export default function DashboardPage() {
   console.clear();
   const [symptom, setSymptom] = useState<any[]>([]);
 
-  const currentYear = new Date().getFullYear().toString();
-
-  const generateChartData = (data: any[], metric: string): any[] => {
-    // console.log(data);
-
-    const months = [
-      'JAN',
-      'FEB',
-      'MAR',
-      'APR',
-      'MAY',
-      'JUN',
-      'JUL',
-      'AUG',
-      'SEP',
-      'OCT',
-      'NOV',
-      'DEC',
-    ];
-    const chartData = months.map((month) => ({ month, level: 'No data' }));
-
-    const monthlyEntries = data
-      .filter((entry) => entry.date.startsWith(currentYear) && entry[metric])
-      .map((entry) => ({
-        month: Number(entry.date.substring(5, 7)),
-        level: entry[metric],
-      }));
-
-    const averages = getAverages(monthlyEntries);
-
-    averages.forEach(({ month, average }) => {
-      const monthName = months[month - 1];
-      const target = chartData.find((item) => item.month === monthName);
-      if (target) target.level = average;
-    });
-
-    // console.log(chartData);
-    return chartData;
-  };
-
-  const getAverages = (entries: { month: number; level: number }[]) => {
-    const monthData: Record<number, { total: number; count: number }> = {};
-
-    entries.forEach(({ month, level }) => {
-      if (!monthData[month]) monthData[month] = { total: 0, count: 0 };
-      monthData[month].total += level;
-      monthData[month].count += 1;
-    });
-
-    return Object.entries(monthData).map(([month, { total, count }]) => ({
-      month: Number(month),
-      average: (total / count).toFixed(1),
-    }));
-  };
-
   const headerMetrics = (data: any[]): string[] => {
-    console.log(data);
+    // console.log(data);
 
     let avgStress: number = 0,
       avgDuration: number = 0,
@@ -101,17 +46,20 @@ export default function DashboardPage() {
     ];
   };
 
-  const getLatestSymptoms = (amount: number): any[] => {
-    // FIXME: symptom is sometimes undefined
-    // FIXME: account for amount being higher than symptom length
+  const getLatestSymptoms = (amount: number): any[] | null => {
     const latestEntries = [];
 
-    for (let i = symptom.length - 1; i >= symptom.length - amount; i--) {
-      if (latestEntries.length <= amount) {
+    // check if symptom state is empty
+    if (symptom.length === 0) {
+      return null;
+    }
+
+    for (let i = symptom.length - 1; i >= 0; i--) {
+      if (symptom[i] && latestEntries.length < amount) {
         latestEntries.push(symptom[i]);
       }
     }
-    console.log(latestEntries);
+    // console.log(latestEntries);
     return latestEntries;
   };
 
@@ -123,7 +71,7 @@ export default function DashboardPage() {
     } else {
       setSymptom(data);
     }
-    console.log(data);
+    // console.log(data);
   };
 
   // FIXME: use a fetch hook not useEffect
@@ -173,7 +121,7 @@ export default function DashboardPage() {
         <Card className='w-[400px] mb-2'>
           <CardHeader>
             <CardTitle>Latest Symptoms</CardTitle>
-            <CardDescription>...</CardDescription>
+            {/* <CardDescription>...</CardDescription> */}
           </CardHeader>
         </Card>
         <div className='flex flex-col gap-2 mb-2'>
