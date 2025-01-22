@@ -102,6 +102,8 @@ export default function DashboardPage() {
   };
 
   const getLatestSymptoms = (amount: number): any[] => {
+    // FIXME: symptom is sometimes undefined
+    // FIXME: account for amount being higher than symptom length
     const latestEntries = [];
 
     for (let i = symptom.length - 1; i >= symptom.length - amount; i--) {
@@ -183,21 +185,23 @@ export default function DashboardPage() {
             ))} */}
           </CardContent>
         </Card>
-        {symptom.length
-          ? getLatestSymptoms(3).map((entry) => (
-              <SymptomCard
-                key={entry.id}
-                date={formatFullDate(entry.date)}
-                title={entry.name}
-                severityColor={getSeverityBadge(entry.severity)[1]}
-                severityTitle={getSeverityBadge(entry.severity)[0]}
-                note={entry.notes}
-                delete={() => {
-                  // deleteData(entry.id);
-                }}
-              />
-            ))
-          : null}
+        <div className='flex flex-col gap-2 mb-2'>
+          {symptom.length
+            ? getLatestSymptoms(3).map((entry) => (
+                <SymptomCard
+                  key={entry.id}
+                  date={formatFullDate(entry.date)}
+                  title={entry.name}
+                  severityColor={getSeverityBadge(entry.severity)[1]}
+                  severityTitle={getSeverityBadge(entry.severity)[0]}
+                  note={entry.notes}
+                  delete={() => {
+                    // deleteData(entry.id);
+                  }}
+                />
+              ))
+            : null}
+        </div>
       </div>
 
       {/* <p>Average Stress Level {headerMetrics(symptom)[0]}</p>
