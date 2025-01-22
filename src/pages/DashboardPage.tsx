@@ -140,7 +140,9 @@ export default function DashboardPage() {
             {/* <CardDescription>...</CardDescription> */}
           </CardHeader>
           <CardContent className='text-2xl'>
-            {headerMetrics(symptom)[0]}
+            {isNaN(headerMetrics(symptom)[0])
+              ? 'No Data'
+              : headerMetrics(symptom)[0]}
           </CardContent>
         </Card>
         <Card className='w-fit max-h-[400px]'>
@@ -149,7 +151,9 @@ export default function DashboardPage() {
             {/* <CardDescription>...</CardDescription> */}
           </CardHeader>
           <CardContent className='text-2xl'>
-            {headerMetrics(symptom)[1]} Hours
+            {isNaN(headerMetrics(symptom)[1])
+              ? 'No Data'
+              : headerMetrics(symptom)[1] + ' Hours'}
           </CardContent>
         </Card>
         <Card className='w-fit max-h-[400px]'>
@@ -158,7 +162,9 @@ export default function DashboardPage() {
             {/* <CardDescription>...</CardDescription> */}
           </CardHeader>
           <CardContent className='text-2xl'>
-            {headerMetrics(symptom)[2]}
+            {isNaN(headerMetrics(symptom)[2])
+              ? 'No Data'
+              : headerMetrics(symptom)[2]}
           </CardContent>
         </Card>
       </div>
