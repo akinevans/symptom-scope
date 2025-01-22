@@ -95,9 +95,9 @@ export default function DashboardPage() {
     avgSeverity = avgSeverity / data.length;
 
     return [
-      avgStress.toFixed(2),
-      avgDuration.toFixed(2),
-      avgSeverity.toFixed(2),
+      avgStress.toFixed(1),
+      avgDuration.toFixed(1),
+      avgSeverity.toFixed(1),
     ];
   };
 
@@ -149,7 +149,7 @@ export default function DashboardPage() {
             {/* <CardDescription>...</CardDescription> */}
           </CardHeader>
           <CardContent className='text-2xl'>
-            {headerMetrics(symptom)[1]}
+            {headerMetrics(symptom)[1]} Hours
           </CardContent>
         </Card>
         <Card className='w-fit max-h-[400px]'>
@@ -164,26 +164,11 @@ export default function DashboardPage() {
       </div>
 
       <div className='w-fit'>
-        <Card className='mb-2'>
+        <Card className='w-[400px] mb-2'>
           <CardHeader>
             <CardTitle>Latest Symptoms</CardTitle>
             <CardDescription>...</CardDescription>
           </CardHeader>
-          <CardContent className='w-[400px]'>
-            {/* {getLatestSymptoms(3).map((entry) => (
-              <SymptomCard
-                key={entry.id}
-                date={formatFullDate(entry.date)}
-                title={entry.name}
-                severityColor={getSeverityBadge(entry.severity)[1]}
-                severityTitle={getSeverityBadge(entry.severity)[0]}
-                note={entry.notes}
-                delete={() => {
-                  // deleteData(entry.id);
-                }}
-              />
-            ))} */}
-          </CardContent>
         </Card>
         <div className='flex flex-col gap-2 mb-2'>
           {symptom.length
@@ -200,13 +185,10 @@ export default function DashboardPage() {
                   }}
                 />
               ))
-            : null}
+            : 'No data present'}
         </div>
       </div>
 
-      {/* <p>Average Stress Level {headerMetrics(symptom)[0]}</p>
-      <p>Average Symptom Duration {headerMetrics(symptom)[1]}</p>
-      <p>Average Symptom Severity {headerMetrics(symptom)[2]}</p> */}
       <div className='flex flex-row flex-wrap gap-2'>
         <Card className='w-fit max-h-[400px]'>
           <CardHeader>
@@ -250,9 +232,6 @@ export default function DashboardPage() {
         </Card>
       </div>
       <div className=' w-full flex flex-row flex-wrap gap-2 justify-evenly'>
-        {/* //& PIE CHART */}
-        <DashPieChart />
-
         <DashLineChart
           title='Average Symptom Severity'
           description={`January - December `}
