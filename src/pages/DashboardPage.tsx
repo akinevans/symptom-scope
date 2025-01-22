@@ -2,7 +2,12 @@ import { useState, useEffect } from 'react';
 import { DashBarChart } from '@/components/charts/DashBarChart';
 import { DashLineChart } from '@/components/charts/DashLineChart';
 import { DashPieChart } from '@/components/charts/DashPieChart';
-import { generateTrackedList } from '@/utility_functions/utility_functions';
+import {
+  generateTrackedList,
+  formatFullDate,
+  getSeverityBadge,
+} from '@/utility_functions/utility_functions';
+import SymptomCard from '../components/SymptomCard';
 import supabase from '../supabase-client';
 
 import {
@@ -72,22 +77,8 @@ export default function DashboardPage() {
     }));
   };
 
-  // const processMultipleEntries = (data: any[], month: string) => {
-  //   return data
-  //     .filter(
-  //       (entry) =>
-  //         entry.date.startsWith(currentYear) &&
-  //         entry.date.substring(5, 7) === month &&
-  //         entry.stressLevel
-  //     )
-  //     .map((entry) => ({
-  //       month: Number(entry.date.substring(5, 7)),
-  //       level: entry.stressLevel,
-  //     }));
-  // };
-
-  const headerMetrics = (data) => {
-    const metrics = [];
+  const headerMetrics = (data: any[]): string[] => {
+    console.log(data);
 
     let avgStress: number = 0,
       avgDuration: number = 0,
@@ -110,6 +101,18 @@ export default function DashboardPage() {
     ];
   };
 
+  const getLatestSymptoms = (amount: number): any[] => {
+    const latestEntries = [];
+
+    for (let i = symptom.length - 1; i >= symptom.length - amount; i--) {
+      if (latestEntries.length <= amount) {
+        latestEntries.push(symptom[i]);
+      }
+    }
+    console.log(latestEntries);
+    return latestEntries;
+  };
+
   const getData = async () => {
     const { data, error } = await supabase.from('symptomTable').select('*');
 
@@ -118,7 +121,7 @@ export default function DashboardPage() {
     } else {
       setSymptom(data);
     }
-    // console.log(data);
+    console.log(data);
   };
 
   // FIXME: use a fetch hook not useEffect
@@ -128,9 +131,78 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <p>Average Stress Level {headerMetrics(symptom)[0]}</p>
+      <div className='mb-2 flex flex-row w-full justify-between items-center'>
+        <Card className='w-fit max-h-[400px]'>
+          <CardHeader>
+            <CardTitle>Average Stress Level</CardTitle>
+            {/* <CardDescription>...</CardDescription> */}
+          </CardHeader>
+          <CardContent className='text-2xl'>
+            {headerMetrics(symptom)[0]}
+          </CardContent>
+        </Card>
+        <Card className='w-fit max-h-[400px]'>
+          <CardHeader>
+            <CardTitle>Average Duration</CardTitle>
+            {/* <CardDescription>...</CardDescription> */}
+          </CardHeader>
+          <CardContent className='text-2xl'>
+            {headerMetrics(symptom)[1]}
+          </CardContent>
+        </Card>
+        <Card className='w-fit max-h-[400px]'>
+          <CardHeader>
+            <CardTitle>Average Severity</CardTitle>
+            {/* <CardDescription>...</CardDescription> */}
+          </CardHeader>
+          <CardContent className='text-2xl'>
+            {headerMetrics(symptom)[2]}
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className='w-fit'>
+        <Card className='mb-2'>
+          <CardHeader>
+            <CardTitle>Latest Symptoms</CardTitle>
+            <CardDescription>...</CardDescription>
+          </CardHeader>
+          <CardContent className='w-[400px]'>
+            {/* {getLatestSymptoms(3).map((entry) => (
+              <SymptomCard
+                key={entry.id}
+                date={formatFullDate(entry.date)}
+                title={entry.name}
+                severityColor={getSeverityBadge(entry.severity)[1]}
+                severityTitle={getSeverityBadge(entry.severity)[0]}
+                note={entry.notes}
+                delete={() => {
+                  // deleteData(entry.id);
+                }}
+              />
+            ))} */}
+          </CardContent>
+        </Card>
+        {symptom.length
+          ? getLatestSymptoms(3).map((entry) => (
+              <SymptomCard
+                key={entry.id}
+                date={formatFullDate(entry.date)}
+                title={entry.name}
+                severityColor={getSeverityBadge(entry.severity)[1]}
+                severityTitle={getSeverityBadge(entry.severity)[0]}
+                note={entry.notes}
+                delete={() => {
+                  // deleteData(entry.id);
+                }}
+              />
+            ))
+          : null}
+      </div>
+
+      {/* <p>Average Stress Level {headerMetrics(symptom)[0]}</p>
       <p>Average Symptom Duration {headerMetrics(symptom)[1]}</p>
-      <p>Average Symptom Severity {headerMetrics(symptom)[2]}</p>
+      <p>Average Symptom Severity {headerMetrics(symptom)[2]}</p> */}
       <div className='flex flex-row flex-wrap gap-2'>
         <Card className='w-fit max-h-[400px]'>
           <CardHeader>

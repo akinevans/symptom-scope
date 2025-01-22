@@ -3,7 +3,10 @@ import { SidebarMenu } from '@/components/SidebarMenu';
 import SymptomCard from '@/components/SymptomCard';
 import DataForm from '@/components/DataForm';
 import supabase from '../supabase-client';
-import { formatFullDate } from '@/utility_functions/utility_functions';
+import {
+  formatFullDate,
+  getSeverityBadge,
+} from '@/utility_functions/utility_functions';
 
 // TODO:  add multi select to form (medications, triggers / cause etc)
 
@@ -30,37 +33,6 @@ export default function TrackingPage() {
     } else {
       setSymptomCards((prev) => prev.filter((entry) => entry.id !== id));
     }
-  };
-
-  const getSeverityBadge = (value: number): string[] => {
-    const severities = [
-      { title: 'Mild', color: 'text-[#2D5101] bg-[#C0DD78]', range: [1, 3] },
-      {
-        title: 'Moderate',
-        color: 'text-[#6D3A00] bg-[#F5CD6F]',
-        range: [4, 6],
-      },
-      { title: 'Severe', color: 'text-[#81371E] bg-[#F3C6BA]', range: [7, 8] },
-      {
-        title: 'Very Severe',
-        color: 'text-[#8C161E] bg-[#FFC3C9]',
-        range: [9, 10],
-      },
-      {
-        title: 'Error',
-        color: 'text-[#000] bg-[#EEE]',
-        range: [11, 100],
-      },
-    ];
-
-    for (const severity of severities) {
-      if (value >= severity.range[0] && value <= severity.range[1]) {
-        return [severity.title, severity.color];
-      }
-    }
-
-    // Error badge
-    return [severities[4].title, severities[4].color];
   };
 
   // FIXME: use a fetch hook not useEffect
