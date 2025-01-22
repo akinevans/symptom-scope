@@ -117,74 +117,77 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      <div className='w-fit'>
-        <Card className='w-[400px] mb-2'>
-          <CardHeader>
-            <CardTitle>Latest Symptoms</CardTitle>
-            {/* <CardDescription>...</CardDescription> */}
-          </CardHeader>
-        </Card>
-        <div className='flex flex-col gap-2 mb-2'>
-          {symptom.length
-            ? getLatestSymptoms(3).map((entry) => (
-                <SymptomCard
-                  key={entry.id}
-                  date={formatFullDate(entry.date)}
-                  title={entry.name}
-                  severityColor={getSeverityBadge(entry.severity)[1]}
-                  severityTitle={getSeverityBadge(entry.severity)[0]}
-                  note={entry.notes}
-                  delete={() => {
-                    // deleteData(entry.id);
-                  }}
-                />
-              ))
-            : 'No data present'}
+      <div className='flex flex-row'>
+        <div className='flex flex-col w-fit'>
+          <Card className='w-[400px] mb-2'>
+            <CardHeader>
+              <CardTitle>Latest Symptoms</CardTitle>
+              {/* <CardDescription>...</CardDescription> */}
+            </CardHeader>
+          </Card>
+          <div className='flex flex-col gap-2 mb-2'>
+            {symptom.length
+              ? getLatestSymptoms(3).map((entry) => (
+                  <SymptomCard
+                    key={entry.id}
+                    date={formatFullDate(entry.date)}
+                    title={entry.name}
+                    severityColor={getSeverityBadge(entry.severity)[1]}
+                    severityTitle={getSeverityBadge(entry.severity)[0]}
+                    note={entry.notes}
+                    delete={() => {
+                      // deleteData(entry.id);
+                    }}
+                  />
+                ))
+              : 'No data present'}
+          </div>
+        </div>
+
+        <div className=' mx-2 flex flex-row flex-wrap gap-2'>
+          <Card className='w-[250px] max-h-[400px]'>
+            <CardHeader>
+              <CardTitle>Medications</CardTitle>
+              <CardDescription>All Tracked Medications</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className='h-[260px] overflow-y-scroll'>
+                {generateTrackedList(symptom, [
+                  'medicationOne',
+                  'medicationTwo',
+                  'medicationThree',
+                  'medicationFour',
+                ]).map((med: string) => (
+                  <Card className='mx-auto my-2 w-full h-fit flex justify-center items-center'>
+                    <CardContent className=' p-1 flex justify-center items-center'>
+                      {med}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className='w-fit max-h-[400px]'>
+            <CardHeader>
+              <CardTitle>Symptoms</CardTitle>
+              <CardDescription>All Tracked Symptoms</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className='w-[250px] h-[260px] overflow-y-scroll'>
+                {generateTrackedList(symptom, ['name']).map((name: string) => (
+                  <Card className='mx-auto my-2 w-full h-fit flex justify-center items-center'>
+                    <CardContent className=' p-1 flex justify-center items-center'>
+                      {name}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
 
-      <div className='flex flex-row flex-wrap gap-2'>
-        <Card className='w-fit max-h-[400px]'>
-          <CardHeader>
-            <CardTitle>Medications</CardTitle>
-            <CardDescription>All Tracked Medications</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className='h-[260px] overflow-y-scroll'>
-              {generateTrackedList(symptom, [
-                'medicationOne',
-                'medicationTwo',
-                'medicationThree',
-                'medicationFour',
-              ]).map((med: string) => (
-                <Card className='mx-auto my-2 w-full h-fit flex justify-center items-center'>
-                  <CardContent className=' p-1 flex justify-center items-center'>
-                    {med}
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className='w-fit max-h-[400px]'>
-          <CardHeader>
-            <CardTitle>Symptoms</CardTitle>
-            <CardDescription>All Tracked Symptoms</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className='h-[260px] overflow-y-scroll'>
-              {generateTrackedList(symptom, ['name']).map((name: string) => (
-                <Card className='mx-auto my-2 w-full h-fit flex justify-center items-center'>
-                  <CardContent className=' p-1 flex justify-center items-center'>
-                    {name}
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
       <div className=' w-full flex flex-row flex-wrap gap-2 justify-evenly'>
         <DashLineChart
           title='Average Symptom Severity'
