@@ -33,11 +33,11 @@ const formSchema = z.object({
   // ^ to make an input REQUIRED, remove the optional method below
   //! if it is NULLABLE in the table it MUST be optional here
   date: z.coerce.date(),
-  name: z.string(),
+  name: z.string().optional(),
   severity: z.number().min(1).max(10).default(5),
   duration: z.number().min(0.5).max(24).default(1),
   stressLevel: z.number().min(1).max(10).default(2),
-  areaOne: z.string(),
+  areaOne: z.string().optional(),
   areaTwo: z.string().optional(),
   areaThree: z.string().optional(),
   areaFour: z.string().optional(),
@@ -49,8 +49,23 @@ const formSchema = z.object({
 });
 
 export default function CompleteDataForm(props) {
-  //   const [cardData, setCardData] = useState(props.symptomData);
+  // const [cardData, setCardData] = useState(props.symptomData);
+  //ID
+  const [id, setId] = useState();
+  // name
   const [name, setName] = useState();
+  //affected areas
+  const [areaOne, setAreaOne] = useState();
+  const [areaTwo, setAreaTwo] = useState();
+  const [areaThree, setAreaThree] = useState();
+  const [areaFour, setAreaFour] = useState();
+  // medications
+  const [medicationOne, setMedicationOne] = useState();
+  const [medicationTwo, setMedicationTwo] = useState();
+  const [medicationThree, setMedicationThree] = useState();
+  const [medicationFour, setMedicationFour] = useState();
+  //note
+  const [note, setNote] = useState();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -59,14 +74,76 @@ export default function CompleteDataForm(props) {
     },
   });
 
+  function refreshPage() {
+    window.location.reload(false);
+  }
+
+  //TODO: get slider values to update
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    //FIXME: reapply RLS row-level security in supabase table later
+    try {
+      const { data, error } = await supabase
+        .from('symptomTable')
+        .update({
+          name: name,
+          areaOne: areaOne,
+          areaTwo: areaTwo,
+          areaThree: areaThree,
+          areaFour: areaFour,
+
+          medicationOne: medicationOne,
+          medicationTwo: medicationTwo,
+          medicationThree: medicationThree,
+          medicationFour: medicationFour,
+
+          notes: note,
+        })
+        .eq('id', id);
+
+      if (error) {
+        console.log(error);
+      }
+      console.log(data);
+
+      toast(
+        <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
+          <code className='text-white'>{JSON.stringify(values, null, 2)}</code>
+        </pre>
+      );
+
+      refreshPage();
+    } catch (error) {
+      console.error('Form submission error', error);
+      toast.error('Failed to submit the form. Please try again.');
+    }
+  };
+
   // FIXME: use a fetch hook not useEffect
   useEffect(() => {
+    //ID
+    setId(props.cardData.id);
+    //name
     setName(props.cardData.name);
+    //affected areas
+    setAreaOne(props.cardData.areaOne);
+    setAreaTwo(props.cardData.areaTwo);
+    setAreaThree(props.cardData.areaThree);
+    setAreaFour(props.cardData.areaFour);
+    //medications
+    setMedicationOne(props.cardData.medicationOne);
+    setMedicationTwo(props.cardData.medicationTwo);
+    setMedicationThree(props.cardData.medicationThree);
+    setMedicationFour(props.cardData.medicationFour);
+    //note
+    setNote(props.cardData.notes);
   }, [props.cardData]);
 
   return (
     <Form {...form}>
-      <form className='ml-4 p-6 w-[60vw] max-w-[900px]  py-10 bg-white rounded-lg'>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className='ml-4 p-6 w-[60vw] max-w-[900px]  py-10 bg-white rounded-lg'
+      >
         {/* //& DATE - auto selects time including seconds */}
         <h1 className='text-emerald-600 text-xl'>
           COMPLETE DATA FORM = EDIT MODE ENABLED
@@ -187,6 +264,10 @@ export default function CompleteDataForm(props) {
                       placeholder='Hands'
                       type=''
                       {...field}
+                      value={areaOne}
+                      onChange={(e) => {
+                        setAreaOne(e.target.value);
+                      }}
                     />
                   </FormControl>
 
@@ -209,6 +290,10 @@ export default function CompleteDataForm(props) {
                       placeholder='Face'
                       type=''
                       {...field}
+                      value={areaTwo}
+                      onChange={(e) => {
+                        setAreaTwo(e.target.value);
+                      }}
                     />
                   </FormControl>
 
@@ -233,6 +318,10 @@ export default function CompleteDataForm(props) {
                       placeholder=''
                       type=''
                       {...field}
+                      value={areaThree}
+                      onChange={(e) => {
+                        setAreaThree(e.target.value);
+                      }}
                     />
                   </FormControl>
 
@@ -255,6 +344,10 @@ export default function CompleteDataForm(props) {
                       placeholder=''
                       type=''
                       {...field}
+                      value={areaFour}
+                      onChange={(e) => {
+                        setAreaFour(e.target.value);
+                      }}
                     />
                   </FormControl>
 
@@ -346,6 +439,10 @@ export default function CompleteDataForm(props) {
                       placeholder='Tylenol'
                       type=''
                       {...field}
+                      value={medicationOne}
+                      onChange={(e) => {
+                        setMedicationOne(e.target.value);
+                      }}
                     />
                   </FormControl>
 
@@ -371,6 +468,10 @@ export default function CompleteDataForm(props) {
                       placeholder='Benadryl'
                       type=''
                       {...field}
+                      value={medicationTwo}
+                      onChange={(e) => {
+                        setMedicationTwo(e.target.value);
+                      }}
                     />
                   </FormControl>
 
@@ -395,6 +496,10 @@ export default function CompleteDataForm(props) {
                       placeholder=''
                       type=''
                       {...field}
+                      value={medicationThree}
+                      onChange={(e) => {
+                        setMedicationThree(e.target.value);
+                      }}
                     />
                   </FormControl>
 
@@ -417,6 +522,10 @@ export default function CompleteDataForm(props) {
                       placeholder=''
                       type=''
                       {...field}
+                      value={medicationFour}
+                      onChange={(e) => {
+                        setMedicationFour(e.target.value);
+                      }}
                     />
                   </FormControl>
 
@@ -444,6 +553,10 @@ export default function CompleteDataForm(props) {
                       placeholder=''
                       className='resize-none'
                       {...field}
+                      value={note}
+                      onChange={(e) => {
+                        setNote(e.target.value);
+                      }}
                     />
                   </FormControl>
 
@@ -453,6 +566,7 @@ export default function CompleteDataForm(props) {
             />
           </div>
         </div>
+        <Button type='submit'>Update</Button>
       </form>
     </Form>
   );
