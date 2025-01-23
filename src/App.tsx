@@ -11,7 +11,7 @@ import supabase from './supabase-client';
 import './App.css';
 
 function App() {
-  console.clear();
+  // console.clear();
 
   const [symptomsList, setSymptomsList] = useState<any[]>([]);
 

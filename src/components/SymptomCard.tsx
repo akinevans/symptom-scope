@@ -55,7 +55,7 @@ export default function SymptomCard(props) {
       <NavLink
         to='#'
         onClick={() => {
-          alert('Symptom Card Clicked');
+          props.onClick();
         }}
       >
         <Card className=' max-w-[410px] '>

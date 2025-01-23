@@ -1,4 +1,5 @@
 'use client';
+import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -47,7 +48,10 @@ const formSchema = z.object({
   notes: z.string().optional(),
 });
 
-export default function DataForm() {
+export default function CompleteDataForm(props) {
+  //   const [cardData, setCardData] = useState(props.symptomData);
+  const [name, setName] = useState();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -55,149 +59,19 @@ export default function DataForm() {
     },
   });
 
-  function getRandomDateIn2025() {
-    const start = new Date(2025, 0, 1); // January 1, 2025
-    const end = new Date(2025, 11, 31); // December 31, 2025
-
-    const randomTimestamp =
-      start.getTime() + Math.random() * (end.getTime() - start.getTime());
-
-    return new Date(randomTimestamp);
-  }
-
-  const generateTestData = async () => {
-    try {
-      for (const testData of sampleData) {
-        const { data, error } = await supabase
-          .from('symptomTable')
-          .insert([testData]);
-        if (error) {
-          console.error('Error submitting Test Data', error);
-        }
-      }
-    } catch (error) {
-      console.error('Error in generateTestData function', error);
-    }
-    refreshPage();
-  };
-
-  const placeholderText =
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
-
-  const sampleData = [
-    {
-      date: getRandomDateIn2025(),
-      name: 'Headache',
-      stressLevel: 3,
-      severity: 7,
-      duration: 6,
-      areaOne: 'Head',
-      medicationOne: 'Tylenol',
-      notes: placeholderText,
-    },
-    {
-      date: getRandomDateIn2025(),
-      name: 'Back Pain',
-      stressLevel: 5,
-      severity: 2,
-      duration: 8,
-      areaOne: 'Back',
-      medicationOne: 'Ibuprofen',
-      notes: placeholderText,
-    },
-    {
-      date: getRandomDateIn2025(),
-      name: 'Stomach Ache',
-      stressLevel: 2,
-      severity: 4,
-      duration: 12,
-      areaOne: 'Stomach',
-      medicationOne: 'Pepto Bismol',
-      notes: placeholderText,
-    },
-    {
-      date: getRandomDateIn2025(),
-      name: 'Migraine',
-      stressLevel: 7,
-      severity: 9,
-      duration: 11,
-      areaOne: 'Head',
-      medicationOne: 'Excedrin',
-      notes: placeholderText,
-    },
-    {
-      date: getRandomDateIn2025(),
-      name: 'Allergy',
-      stressLevel: 4,
-      severity: 5,
-      duration: 2,
-      areaOne: 'Nose',
-      medicationOne: 'Claritin',
-      notes: placeholderText,
-    },
-    {
-      date: getRandomDateIn2025(),
-      name: 'Heat Rash',
-      stressLevel: 10,
-      severity: 3,
-      duration: 16,
-      areaOne: 'Arm',
-      medicationOne: 'Aloe Vera',
-      notes: placeholderText,
-    },
-    {
-      date: getRandomDateIn2025(),
-      name: 'Dry Mouth',
-      stressLevel: 1,
-      severity: 2,
-      duration: 4.5,
-      areaOne: 'Mouth',
-      medicationOne: 'Salagen',
-      notes: placeholderText,
-    },
-  ];
-
-  function refreshPage() {
-    window.location.reload(false);
-  }
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    //FIXME: reapply RLS row-level security in supabase table later
-    try {
-      const { data, error } = await supabase
-        .from('symptomTable')
-        .insert([values])
-        .single();
-
-      if (error) {
-        console.log(error);
-      }
-      console.log(data);
-
-      ///
-      ///
-
-      // console.log(values);
-      toast(
-        <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-          <code className='text-white'>{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      );
-
-      refreshPage();
-    } catch (error) {
-      console.error('Form submission error', error);
-      toast.error('Failed to submit the form. Please try again.');
-    }
-  };
+  // FIXME: use a fetch hook not useEffect
+  useEffect(() => {
+    setName(props.cardData.name);
+  }, [props.cardData]);
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className='ml-4 p-6 w-[60vw] max-w-[900px]  py-10 bg-white rounded-lg'
-      >
+      <form className='ml-4 p-6 w-[60vw] max-w-[900px]  py-10 bg-white rounded-lg'>
         {/* //& DATE - auto selects time including seconds */}
+        <h1 className='text-emerald-600 text-xl'>
+          COMPLETE DATA FORM = EDIT MODE ENABLED
+        </h1>
+
         <FormField
           control={form.control}
           name='date'
@@ -250,7 +124,15 @@ export default function DataForm() {
                     What symptom are you experiencing?
                   </FormDescription>
                   <FormControl>
-                    <Input placeholder='' type='text' {...field} />
+                    <Input
+                      placeholder=''
+                      type='text'
+                      {...field}
+                      value={name}
+                      onChange={(e) => {
+                        setName(e.target.value);
+                      }}
+                    />
                   </FormControl>
 
                   <FormMessage />
@@ -571,16 +453,6 @@ export default function DataForm() {
             />
           </div>
         </div>
-
-        <Button type='submit'>Submit</Button>
-        <Button
-          className='m-2 bg-orange-600'
-          onClick={() => {
-            generateTestData();
-          }}
-        >
-          Make Test Data
-        </Button>
       </form>
     </Form>
   );

@@ -114,6 +114,7 @@ export default function DashboardPage(props) {
                     severityColor={getSeverityBadge(entry.severity)[1]}
                     severityTitle={getSeverityBadge(entry.severity)[0]}
                     note={entry.notes}
+                    onClick=''
                     handleDelete={() => {
                       props.delete(entry.id);
                     }}
