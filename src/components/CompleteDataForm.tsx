@@ -34,7 +34,7 @@ const formSchema = z.object({
   //! if it is NULLABLE in the table it MUST be optional here
   date: z.coerce.date(),
   name: z.string().optional(),
-  severity: z.number().min(1).max(10).default(5),
+  severity: z.number().min(1).max(10).default(7),
   duration: z.number().min(0.5).max(24).default(1),
   stressLevel: z.number().min(1).max(10).default(2),
   areaOne: z.string().optional(),
@@ -54,6 +54,8 @@ export default function CompleteDataForm(props) {
   const [id, setId] = useState();
   // name
   const [name, setName] = useState();
+  //severity
+  const [severity, setSeverity] = useState([]);
   //affected areas
   const [areaOne, setAreaOne] = useState();
   const [areaTwo, setAreaTwo] = useState();
@@ -86,16 +88,15 @@ export default function CompleteDataForm(props) {
         .from('symptomTable')
         .update({
           name: name,
+          severity: severity,
           areaOne: areaOne,
           areaTwo: areaTwo,
           areaThree: areaThree,
           areaFour: areaFour,
-
           medicationOne: medicationOne,
           medicationTwo: medicationTwo,
           medicationThree: medicationThree,
           medicationFour: medicationFour,
-
           notes: note,
         })
         .eq('id', id);
@@ -103,7 +104,7 @@ export default function CompleteDataForm(props) {
       if (error) {
         console.log(error);
       }
-      console.log(data);
+      // console.log(data);
 
       toast(
         <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
@@ -118,12 +119,17 @@ export default function CompleteDataForm(props) {
     }
   };
 
+  console.log('severity type: ', typeof severity, severity);
+  console.log(props.cardData.severity);
+
   // FIXME: use a fetch hook not useEffect
   useEffect(() => {
     //ID
     setId(props.cardData.id);
     //name
     setName(props.cardData.name);
+    //severity
+    setSeverity(props.cardData.severity);
     //affected areas
     setAreaOne(props.cardData.areaOne);
     setAreaTwo(props.cardData.areaTwo);
@@ -225,7 +231,7 @@ export default function CompleteDataForm(props) {
               name='severity'
               render={({ field: { value, onChange } }) => (
                 <FormItem>
-                  <FormLabel>Severity - {value || 5}</FormLabel>
+                  <FormLabel>Severity - {severity}</FormLabel>
                   <FormDescription>
                     Adjust by sliding left or right.
                   </FormDescription>
@@ -234,13 +240,14 @@ export default function CompleteDataForm(props) {
                       min={1}
                       max={10}
                       step={1}
-                      defaultValue={[5]}
+                      //^ using props works but clicking the next card causes the value to not change
+                      defaultValue={[props.cardData.severity]}
                       onValueChange={(vals) => {
+                        setSeverity(vals[0]);
                         onChange(vals[0]);
                       }}
                     />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
@@ -264,7 +271,7 @@ export default function CompleteDataForm(props) {
                       placeholder='Hands'
                       type=''
                       {...field}
-                      value={areaOne}
+                      value={areaOne === null ? '' : areaOne}
                       onChange={(e) => {
                         setAreaOne(e.target.value);
                       }}
@@ -290,7 +297,7 @@ export default function CompleteDataForm(props) {
                       placeholder='Face'
                       type=''
                       {...field}
-                      value={areaTwo}
+                      value={areaTwo === null ? '' : areaTwo}
                       onChange={(e) => {
                         setAreaTwo(e.target.value);
                       }}
@@ -318,7 +325,7 @@ export default function CompleteDataForm(props) {
                       placeholder=''
                       type=''
                       {...field}
-                      value={areaThree}
+                      value={areaThree === null ? '' : areaThree}
                       onChange={(e) => {
                         setAreaThree(e.target.value);
                       }}
@@ -344,7 +351,7 @@ export default function CompleteDataForm(props) {
                       placeholder=''
                       type=''
                       {...field}
-                      value={areaFour}
+                      value={areaFour === null ? '' : areaFour}
                       onChange={(e) => {
                         setAreaFour(e.target.value);
                       }}
@@ -439,7 +446,7 @@ export default function CompleteDataForm(props) {
                       placeholder='Tylenol'
                       type=''
                       {...field}
-                      value={medicationOne}
+                      value={medicationOne === null ? '' : medicationOne}
                       onChange={(e) => {
                         setMedicationOne(e.target.value);
                       }}
@@ -468,7 +475,7 @@ export default function CompleteDataForm(props) {
                       placeholder='Benadryl'
                       type=''
                       {...field}
-                      value={medicationTwo}
+                      value={medicationTwo === null ? '' : medicationTwo}
                       onChange={(e) => {
                         setMedicationTwo(e.target.value);
                       }}
@@ -496,7 +503,7 @@ export default function CompleteDataForm(props) {
                       placeholder=''
                       type=''
                       {...field}
-                      value={medicationThree}
+                      value={medicationThree === null ? '' : medicationThree}
                       onChange={(e) => {
                         setMedicationThree(e.target.value);
                       }}
@@ -522,7 +529,7 @@ export default function CompleteDataForm(props) {
                       placeholder=''
                       type=''
                       {...field}
-                      value={medicationFour}
+                      value={medicationFour === null ? '' : medicationFour}
                       onChange={(e) => {
                         setMedicationFour(e.target.value);
                       }}
