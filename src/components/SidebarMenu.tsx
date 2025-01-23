@@ -46,8 +46,12 @@ export function SidebarMenu() {
                   <SelectItem value='Date Descending'>
                     Date Descending
                   </SelectItem>
-                  <SelectItem value='Severity Ascending'>Severity</SelectItem>
-                  <SelectItem value='Severity Descending'>Severity</SelectItem>
+                  <SelectItem value='Severity Ascending'>
+                    Severity Ascending
+                  </SelectItem>
+                  <SelectItem value='Severity Descending'>
+                    Severity Descending
+                  </SelectItem>
                 </SelectContent>
               </Select>
               {/* //& Filter */}
@@ -56,15 +60,11 @@ export function SidebarMenu() {
                   <SelectValue placeholder='Filter' />
                 </SelectTrigger>
                 <SelectContent position='popper'>
-                  <SelectItem value='Severity: Mild'>Severity: Mild</SelectItem>
-                  <SelectItem value='Severity: Moderate'>
-                    Severity: Moderate
-                  </SelectItem>
+                  <SelectItem value='Mild'>Mild</SelectItem>
+                  <SelectItem value='Moderate'>Moderate</SelectItem>
 
-                  <SelectItem value='Severity: Severe'>
-                    Severity: Severe
-                  </SelectItem>
-                  <SelectItem value='Medication'>Medication</SelectItem>
+                  <SelectItem value='Severe'>Severe</SelectItem>
+                  <SelectItem value='Very Severe'>Very Severe</SelectItem>
                 </SelectContent>
               </Select>
             </div>
