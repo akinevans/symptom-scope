@@ -1,14 +1,12 @@
-import { useState, useEffect } from 'react';
 import { DashBarChart } from '@/components/charts/DashBarChart';
 import { DashLineChart } from '@/components/charts/DashLineChart';
+import SymptomCard from '../components/SymptomCard';
 import {
   generateTrackedList,
   formatFullDate,
   getSeverityBadge,
   generateChartData,
 } from '@/utility_functions/utility_functions';
-import SymptomCard from '../components/SymptomCard';
-import supabase from '../supabase-client';
 
 import {
   Card,
@@ -18,10 +16,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-export default function DashboardPage() {
-  console.clear();
-  const [symptom, setSymptom] = useState<any[]>([]);
-
+export default function DashboardPage(props) {
   const headerMetrics = (data: any[]): string[] => {
     // console.log(data);
 
@@ -49,35 +44,19 @@ export default function DashboardPage() {
   const getLatestSymptoms = (amount: number): any[] | null => {
     const latestEntries = [];
 
-    // check if symptom state is empty
-    if (symptom.length === 0) {
+    // check if props.symptomData state is empty
+    if (props.symptomData.length === 0) {
       return null;
     }
 
-    for (let i = symptom.length - 1; i >= 0; i--) {
-      if (symptom[i] && latestEntries.length < amount) {
-        latestEntries.push(symptom[i]);
+    for (let i = props.symptomData.length - 1; i >= 0; i--) {
+      if (props.symptomData[i] && latestEntries.length < amount) {
+        latestEntries.push(props.symptomData[i]);
       }
     }
     // console.log(latestEntries);
     return latestEntries;
   };
-
-  const getData = async () => {
-    const { data, error } = await supabase.from('symptomTable').select('*');
-
-    if (error) {
-      console.log(error);
-    } else {
-      setSymptom(data);
-    }
-    // console.log(data);
-  };
-
-  // FIXME: use a fetch hook not useEffect
-  useEffect(() => {
-    getData();
-  }, []);
 
   return (
     <div>
@@ -88,9 +67,9 @@ export default function DashboardPage() {
             {/* <CardDescription>...</CardDescription> */}
           </CardHeader>
           <CardContent className='text-2xl'>
-            {isNaN(headerMetrics(symptom)[0])
+            {isNaN(headerMetrics(props.symptomData)[0])
               ? 'No Data'
-              : headerMetrics(symptom)[0]}
+              : headerMetrics(props.symptomData)[0]}
           </CardContent>
         </Card>
         <Card className='w-fit max-h-[400px]'>
@@ -99,9 +78,9 @@ export default function DashboardPage() {
             {/* <CardDescription>...</CardDescription> */}
           </CardHeader>
           <CardContent className='text-2xl'>
-            {isNaN(headerMetrics(symptom)[1])
+            {isNaN(headerMetrics(props.symptomData)[1])
               ? 'No Data'
-              : headerMetrics(symptom)[1] + ' Hours'}
+              : headerMetrics(props.symptomData)[1] + ' Hours'}
           </CardContent>
         </Card>
         <Card className='w-fit max-h-[400px]'>
@@ -110,9 +89,9 @@ export default function DashboardPage() {
             {/* <CardDescription>...</CardDescription> */}
           </CardHeader>
           <CardContent className='text-2xl'>
-            {isNaN(headerMetrics(symptom)[2])
+            {isNaN(headerMetrics(props.symptomData)[2])
               ? 'No Data'
-              : headerMetrics(symptom)[2]}
+              : headerMetrics(props.symptomData)[2]}
           </CardContent>
         </Card>
       </div>
@@ -126,7 +105,7 @@ export default function DashboardPage() {
             </CardHeader>
           </Card>
           <div className='flex flex-col gap-2 mb-2'>
-            {symptom.length
+            {props.symptomData.length
               ? getLatestSymptoms(3).map((entry) => (
                   <SymptomCard
                     key={entry.id}
@@ -135,8 +114,8 @@ export default function DashboardPage() {
                     severityColor={getSeverityBadge(entry.severity)[1]}
                     severityTitle={getSeverityBadge(entry.severity)[0]}
                     note={entry.notes}
-                    delete={() => {
-                      // deleteData(entry.id);
+                    handleDelete={() => {
+                      props.delete(entry.id);
                     }}
                   />
                 ))
@@ -152,7 +131,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className='h-[260px] overflow-y-scroll'>
-                {generateTrackedList(symptom, [
+                {generateTrackedList(props.symptomData, [
                   'medicationOne',
                   'medicationTwo',
                   'medicationThree',
@@ -175,13 +154,15 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className='w-[250px] h-[260px] overflow-y-scroll'>
-                {generateTrackedList(symptom, ['name']).map((name: string) => (
-                  <Card className='mx-auto my-2 w-full h-fit flex justify-center items-center'>
-                    <CardContent className=' p-1 flex justify-center items-center'>
-                      {name}
-                    </CardContent>
-                  </Card>
-                ))}
+                {generateTrackedList(props.symptomData, ['name']).map(
+                  (name: string) => (
+                    <Card className='mx-auto my-2 w-full h-fit flex justify-center items-center'>
+                      <CardContent className=' p-1 flex justify-center items-center'>
+                        {name}
+                      </CardContent>
+                    </Card>
+                  )
+                )}
               </div>
             </CardContent>
           </Card>
@@ -192,25 +173,25 @@ export default function DashboardPage() {
         <DashLineChart
           title='Average Symptom Severity'
           description={`January - December `}
-          chartData={generateChartData(symptom, 'severity')}
+          chartData={generateChartData(props.symptomData, 'severity')}
         />
 
         <DashLineChart
           title='Average Stress Level'
           description={`January - December `}
-          chartData={generateChartData(symptom, 'stressLevel')}
+          chartData={generateChartData(props.symptomData, 'stressLevel')}
         />
 
         <DashBarChart
           title='Average Duration'
           description={`January - December `}
-          chartData={generateChartData(symptom, 'duration')}
+          chartData={generateChartData(props.symptomData, 'duration')}
         />
 
         <DashBarChart
           title='Average Severity'
           description={`January - December`}
-          chartData={generateChartData(symptom, 'severity')}
+          chartData={generateChartData(props.symptomData, 'severity')}
         />
       </div>
     </div>
