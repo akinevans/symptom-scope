@@ -1,5 +1,4 @@
 export const formatFullDate = (date: string): string => {
-  // console.log(date);
   // FORMAT: MM DD, YYYY
   const yearNum: string = date.substring(0, 4);
   const monthNum: string = date.substring(5, 7);

@@ -7,13 +7,22 @@ import DashboardPage from './pages/DashboardPage.tsx';
 import LoginPage from './pages/LoginPage.tsx';
 import HomePage from './pages/HomePage.tsx';
 import supabase from './supabase-client';
-
 import './App.css';
+
+//TODO
+//  Home Page
+//  About Page
+//  Contact Page
+//  Privacy Policy Page
+//* App.tsx - Sort cards by date ascending / descending
+//* App.tsx  - Sort cards by intensity
+// Login functionality and supabase RLS
 
 function App() {
   // console.clear();
 
   const [symptomsList, setSymptomsList] = useState<any[]>([]);
+  console.log(symptomsList);
 
   const getData = async () => {
     const { data, error } = await supabase.from('symptomTable').select('*');

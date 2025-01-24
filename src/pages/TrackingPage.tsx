@@ -29,7 +29,7 @@ export default function TrackingPage(props) {
       <div className=' flex flex-col max-w-[410px] max-h-[1300px] w-fit text-left'>
         <SidebarMenu />
 
-        <div className='flex flex-col-reverse gap-y-2 overflow-y-scroll scroll-smooth'>
+        <div className='flex flex-col gap-y-2 overflow-y-scroll scroll-smooth'>
           {props.symptomData.map((entry) => (
             <SymptomCard
               key={entry.id}
