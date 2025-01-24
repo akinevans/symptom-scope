@@ -17,6 +17,7 @@ import './App.css';
 //* App.tsx - Sort cards by date ascending / descending
 //* App.tsx  - Sort cards by intensity
 // Login functionality and supabase RLS
+// calculate % change from first date - last date for dashboard charts
 
 function App() {
   // console.clear();
@@ -30,9 +31,18 @@ function App() {
     if (error) {
       console.log(error);
     } else {
-      setSymptomsList(data);
+      sortSymptomsByDate(data);
     }
     // console.log(data);
+  };
+
+  const sortSymptomsByDate = (list, ascending = true) => {
+    const sortedList = [...list].sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return ascending ? dateA - dateB : dateB - dateA;
+    });
+    setSymptomsList(sortedList);
   };
 
   const deleteData = async (id: number) => {
