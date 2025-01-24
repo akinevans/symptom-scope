@@ -10,7 +10,11 @@ import {
 } from '@/components/ui/select';
 import { Separator } from './ui/separator';
 
-export function SidebarMenu() {
+export function SidebarMenu(props) {
+  const handleValueChange = (value: string) => {
+    props.setSort(value);
+  };
+
   return (
     <Card className=' mb-2 w-[410px] '>
       <CardHeader>
@@ -37,7 +41,7 @@ export function SidebarMenu() {
             </div>
             <div className='flex flex-col space-y-1.5'>
               {/* //& Sort */}
-              <Select>
+              <Select onValueChange={handleValueChange}>
                 <SelectTrigger id='sort'>
                   <SelectValue placeholder='Sort' />
                 </SelectTrigger>
@@ -45,12 +49,6 @@ export function SidebarMenu() {
                   <SelectItem value='Date Ascending'>Date Ascending</SelectItem>
                   <SelectItem value='Date Descending'>
                     Date Descending
-                  </SelectItem>
-                  <SelectItem value='Severity Ascending'>
-                    Severity Ascending
-                  </SelectItem>
-                  <SelectItem value='Severity Descending'>
-                    Severity Descending
                   </SelectItem>
                 </SelectContent>
               </Select>

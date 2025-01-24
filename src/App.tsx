@@ -18,12 +18,13 @@ import './App.css';
 //* App.tsx  - Sort cards by intensity
 // Login functionality and supabase RLS
 // calculate % change from first date - last date for dashboard charts
+// Redux for persisting user sort / filter choices, selected symptomCard
 
 function App() {
   // console.clear();
 
   const [symptomsList, setSymptomsList] = useState<any[]>([]);
-  console.log(symptomsList);
+  // console.log(symptomsList);
 
   const getData = async () => {
     const { data, error } = await supabase.from('symptomTable').select('*');

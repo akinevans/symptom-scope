@@ -14,22 +14,27 @@ import {
 export default function TrackingPage(props) {
   const [editMode, setEditMode] = useState(false);
   const [currentCard, setCurrentCard] = useState();
+  const [sortPreference, setSortPreference] = useState('Date Descending');
+  // console.log(sortPreference);
 
   const handleEditMode = (data) => {
     setCurrentCard(data);
-    // setEditMode((prevEditMode) => !prevEditMode);
     if (!editMode) {
       setEditMode(true);
     }
-    console.log('editMode: ', editMode, data.id);
+    // console.log('editMode: ', editMode, data.id);
   };
 
   return (
     <div className='flex flex-row max-h-[90vh] '>
       <div className=' flex flex-col max-w-[410px] max-h-[1300px] w-fit text-left'>
-        <SidebarMenu />
+        <SidebarMenu sort={sortPreference} setSort={setSortPreference} />
 
-        <div className='flex flex-col gap-y-2 overflow-y-scroll scroll-smooth'>
+        <div
+          className={`flex flex-col gap-y-2 overflow-y-scroll scroll-smooth 
+          ${sortPreference === 'Date Ascending' ? '' : 'flex-col-reverse'} 
+          `}
+        >
           {props.symptomData.map((entry) => (
             <SymptomCard
               key={entry.id}
