@@ -28,7 +28,13 @@ export default function TrackingPage(props) {
   return (
     <div className='flex flex-row max-h-[90vh] '>
       <div className=' flex flex-col max-w-[410px] max-h-[1300px] w-fit text-left'>
-        <SidebarMenu sort={sortPreference} setSort={setSortPreference} />
+        <SidebarMenu
+          sort={sortPreference}
+          setEdit={() => {
+            setEditMode(false);
+          }}
+          setSort={setSortPreference}
+        />
 
         <div
           className={`flex flex-col gap-y-2 overflow-y-scroll scroll-smooth 

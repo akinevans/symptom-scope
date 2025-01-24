@@ -29,7 +29,7 @@ export function SidebarMenu(props) {
             <div className=' flex flex-col space-y-1.5'>
               <Button
                 onClick={() => {
-                  alert('New Entry Btn Clicked');
+                  props.setEdit();
                 }}
               >
                 + New Entry
@@ -41,7 +41,10 @@ export function SidebarMenu(props) {
             </div>
             <div className='flex flex-col space-y-1.5'>
               {/* //& Sort */}
-              <Select onValueChange={handleValueChange}>
+              <Select
+                onValueChange={handleValueChange}
+                defaultValue='Date Descending'
+              >
                 <SelectTrigger id='sort'>
                   <SelectValue placeholder='Sort' />
                 </SelectTrigger>
