@@ -24,6 +24,8 @@ export default function DashboardPage(props) {
       avgDuration: number = 0,
       avgSeverity: number = 0;
 
+    const totalSymptoms: number = data.length;
+
     // get average levels
     for (let i = 0; i < data.length; i++) {
       avgStress += data[i].stressLevel;
@@ -35,6 +37,7 @@ export default function DashboardPage(props) {
     avgSeverity = avgSeverity / data.length;
 
     return [
+      totalSymptoms.toString(),
       avgStress.toFixed(1),
       avgDuration.toFixed(1),
       avgSeverity.toFixed(1),
@@ -63,7 +66,7 @@ export default function DashboardPage(props) {
       <div className='mb-2 flex flex-row w-full justify-between items-center'>
         <Card className='w-fit max-h-[400px]'>
           <CardHeader>
-            <CardTitle>Average Stress Level</CardTitle>
+            <CardTitle>Symptoms Tracked</CardTitle>
             {/* <CardDescription>...</CardDescription> */}
           </CardHeader>
           <CardContent className='text-2xl'>
@@ -74,13 +77,24 @@ export default function DashboardPage(props) {
         </Card>
         <Card className='w-fit max-h-[400px]'>
           <CardHeader>
-            <CardTitle>Average Duration</CardTitle>
+            <CardTitle>Average Stress Level</CardTitle>
             {/* <CardDescription>...</CardDescription> */}
           </CardHeader>
           <CardContent className='text-2xl'>
             {isNaN(headerMetrics(props.symptomData)[1])
               ? 'No Data'
-              : headerMetrics(props.symptomData)[1] + ' Hours'}
+              : headerMetrics(props.symptomData)[1]}
+          </CardContent>
+        </Card>
+        <Card className='w-fit max-h-[400px]'>
+          <CardHeader>
+            <CardTitle>Average Duration</CardTitle>
+            {/* <CardDescription>...</CardDescription> */}
+          </CardHeader>
+          <CardContent className='text-2xl'>
+            {isNaN(headerMetrics(props.symptomData)[2])
+              ? 'No Data'
+              : headerMetrics(props.symptomData)[2] + ' Hours'}
           </CardContent>
         </Card>
         <Card className='w-fit max-h-[400px]'>
@@ -89,9 +103,9 @@ export default function DashboardPage(props) {
             {/* <CardDescription>...</CardDescription> */}
           </CardHeader>
           <CardContent className='text-2xl'>
-            {isNaN(headerMetrics(props.symptomData)[2])
+            {isNaN(headerMetrics(props.symptomData)[3])
               ? 'No Data'
-              : headerMetrics(props.symptomData)[2]}
+              : headerMetrics(props.symptomData)[3]}
           </CardContent>
         </Card>
       </div>
